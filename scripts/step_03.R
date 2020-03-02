@@ -10,13 +10,14 @@ path2_json_file = args[1]
 
 # **********************************************************************
 # Hard coded to test
-#path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
+# path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
 
 print("Loading libraries: genefilter, jsonlite")
 options(stringsAsFactors = FALSE)
 library(genefilter)
 library(jsonlite)
 
+# Load the necessary libraries
 print("*** Reading the input files ***")
 # Reading the json file with the file paths
 json = read_json(path2_json_file)
@@ -39,17 +40,11 @@ print("*** Applying a Z-transformation to the matrix ***")
 Z = (assay_rld - mn) / stdev
 
 ## Generate plots
-plot(mn, stdev)
-plot(rowMeans(Z), genefilter::rowSds(Z))
+#plot(mn, stdev)
+#plot(rowMeans(Z), genefilter::rowSds(Z))
 
 print("*** Saving the output files to the results folder ***")
 # Save the normalized matrix
 output_Z = file.path(parent_folder, "results", paste0(experiment, "_Z_normalized.txt"))
 write.table(Z, file = output_Z, sep = '\t')
-# Save the matrix of gene means
-output_mean = file.path(parent_folder, "results", paste0(experiment, "_gene_means.txt"))
-write.table(mn, file = output_mean, sep = '\t')
-# Save the matrix of gene standard deviations
-output_sd = file.path(parent_folder, "results", paste0(experiment, "_gene_sd.txt"))
-write.table(stdev, file = output_sd, sep = '\t')
 

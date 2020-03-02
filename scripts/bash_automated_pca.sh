@@ -39,4 +39,8 @@ echo Entering step_03.R
 Rscript step_03.R ${JSON_PATH}
 echo Leaving step_03.R
 
+echo "********************************************"
+echo Entering step_04.R
+Rscript step_04.R ${JSON_PATH}
+echo Leaving step_04.R
 
