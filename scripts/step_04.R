@@ -9,7 +9,7 @@ path2_json_file = args[1]
 
 # **********************************************************************
 # Hard coded to test
-# path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
+path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
 
 # Load the necessary libraries
 print("Loading libraries: jsonlite")
@@ -32,12 +32,12 @@ path2_count_sd = file.path(parent_folder, "results", paste0(experiment, "_geneco
 # Extracting the mean and sd thresholds
 # If they do not exist in the json, set them at 0.75%
 
-if (is.na(json[[1]][["input_varibles"]][["mean_precentage_threshold"]])){
-  mean_thr = 0.75
+if (is.na(json[[1]]$"input_varibles"$"mean_precentage_threshold")){
+  mean_thr = 0.25
 }
 
-if (is.na(json[[1]][["input_varibles"]][["sd_precentage_threshold"]])){
-  sd_thr = 0.75
+if (is.na(json[[1]]$"input_varibles"$"sd_precentage_threshold")){
+  sd_thr = 0.25
 }
 
 
@@ -59,14 +59,14 @@ sd_quantile <-   quantile(raw_sd[,1], probs = sd_thr)
 mean_subset <- subset(raw_means, raw_means[,1]>mean_quantile)
 sd_subset <- subset(raw_sd, raw_sd[,1] > sd_quantile)
 
-#nrow(raw_means) - nrow(mean_subset)
-#nrow(raw_sd) - nrow(sd_subset)
+nrow(raw_means) - nrow(mean_subset)
+nrow(raw_sd) - nrow(sd_subset)
 
-# hist(log(raw_means), xlim = c(-1, 20), breaks = 100)
-# abline(v=log(mean_quantile), col = 'red')
+hist(log(raw_means), xlim = c(-1, 20), breaks = 100)
+abline(v=log(mean_quantile), col = 'red')
 # 
-# hist(log(raw_sd), xlim = c(-1, 20), breaks = 100)
-# abline(v=log(sd_quantile), col = 'red')
+hist(log(raw_sd), xlim = c(-1, 20), breaks = 100)
+abline(v=log(sd_quantile), col = 'red')
 
 
 # Subsetting the data set for a min average and variance in expression levels
@@ -83,6 +83,7 @@ Z = Z[gene_id_sd,]
 
 outputfile_path = file.path(parent_folder, "results", paste0(experiment , "_Z_threshold.txt"))
 write.table(Z, file = outputfile_path, sep = '\t')
+
 
 
 

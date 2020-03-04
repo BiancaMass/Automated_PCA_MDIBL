@@ -30,9 +30,9 @@ Rscript step_01.R ${JSON_PATH}
 echo Leaving step_01.R
 
 echo "********************************************"
-echo Entering step_02_01.R
-Rscript step_02_01.R ${JSON_PATH}
-echo Leaving step_02_01.R
+echo Entering step_02.R
+Rscript step_02.R ${JSON_PATH}
+echo Leaving step_02.R
 
 echo "********************************************"
 echo Entering step_03.R

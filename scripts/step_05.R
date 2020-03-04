@@ -18,6 +18,7 @@ library(genefilter)
 library(jsonlite)
 library(ggplot2)
 library(dplyr)
+library(factoextra)
 
 # Read in input files:
 # JSON input file with SD and AVG thresholds
@@ -32,7 +33,7 @@ path2_count = file.path(parent_folder, "results", paste0(experiment , "_Z_thresh
 filt_count = as.matrix(read.table(path2_count, sep = "\t", header = TRUE, row.names = 1))
 design = read.table(path2_design, sep = "\t", header = TRUE, row.names = 1)
 # !!!!! Assumes treatment is column 3 !!!!
-pca_variable = colnames(design)[3]
+# pca_variable = colnames(design)[3]
 
 
 # **************** Start of the program **********************
@@ -54,8 +55,7 @@ if (mean(stdev) != 1){
 
 print("***Performing PCA. This can take a while.***")
 cols = ncol(filt_count)
-count_transposed <- t(filt_count)
-pca = prcomp(count_transposed)
+pca = prcomp(t(filt_count), scale. = TRUE)
 plot(pca$x[,1], pca$x[,2])
 plot(pca$x[,2], pca$x[,3])
 pcavar <- pca$sdev^2
@@ -113,8 +113,8 @@ top_10_genes
 pca$rotation[top_10_genes,1]
 
 
-
-
+fviz_eig(pca) # visualize eigenvalues
+get_eig(pca)
 
 
 
