@@ -2,16 +2,13 @@
 # and the design file. It prints out and saves a summary of each.
 
 # **********************************************************************
-
 args = commandArgs(trailingOnly = T)
 print(args)
-
 path2_json_file = args[1]
-
 # **********************************************************************
 
 # Hard coded to test
- # path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
+# path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
 
 # Load the necessary libraries
 print("Loading libraries: jsonlite")
@@ -24,10 +21,10 @@ print("*** Reading the JSON file that contains paths to all input files ***")
 json = read_json(path2_json_file)
 
 # Extract the input file paths from json
-parent_folder = json[[1]][["folders"]][["parent_folder"]]
-experiment = json[[1]][["input_files"]][["experiment_name"]]
-path2_design = json[[1]][["input_files"]][["infile1"]]
-path2_counts = json[[1]][["input_files"]][["infile2"]]
+parent_folder = json[[1]]$"folders"$"parent_folder"
+experiment = json[[1]]$"input_files"$"experiment_name"
+path2_design = json[[1]]$"input_files"$"infile1"
+path2_counts = json[[1]]$"input_files"$"infile2"
 
 print("Path to design and est.counts:")
 print(path2_design)

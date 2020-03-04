@@ -104,6 +104,7 @@ if (ncol(assay(dds)) <=30) {
 } else {
    vsd <- vst(dds, blind = FALSE)
    vsd_assay <- assay(vsd)
-   output_matrix = file.path(parent_folder, "results", paste0(experiment,"_vsd_normalized.txt"))
+   output_matrix = file.path(parent_folder, "results", paste0(experiment,"_vst_normalized.txt"))
    write.table(vsd_assay, file = output_matrix, sep = '\t')
 }
+

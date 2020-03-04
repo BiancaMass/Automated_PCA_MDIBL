@@ -5,7 +5,6 @@
 
 args = base::commandArgs(trailingOnly = TRUE)
 print(args)
-
 path2_json_file = args[1]
 
 # **********************************************************************
@@ -22,26 +21,34 @@ print("*** Reading the input files ***")
 # Reading the json file with the file paths
 json = read_json(path2_json_file)
 
-# File paths to parent folder, and input file (normalized matrix from step_02_0x.R)
-parent_folder = json[[1]][["folders"]][["parent_folder"]]
-experiment = json[[1]][["input_files"]][["experiment_name"]]
-input_matrix = file.path(parent_folder, "results", paste0(experiment,"_rld_normalized.txt"))
+# File paths to parent folder, and input file (normalized matrix from step_02.R i.e. rld or vsd matrix)
+parent_folder = json[[1]]$"folders"$"parent_folder"
+experiment = json[[1]]$"input_files"$"experiment_name"
+
+if (file.exists(file.path(parent_folder, "results", paste0(experiment,"_rld_normalized.txt")))){
+  input_matrix = file.path(parent_folder, "results", paste0(experiment,"_rld_normalized.txt"))
+}
+
+if (file.exists(file.path(parent_folder, "results", paste0(experiment,"_vst_normalized.txt")))){
+  input_matrix = file.path(parent_folder, "results", paste0(experiment,"_vst_normalized.txt"))
+}
 
 # Read the input matrix
-assay_rld = read.table(input_matrix, sep = '\t', header = TRUE,  row.names = 1)
+matrix_norm = read.table(input_matrix, sep = '\t', header = TRUE,  row.names = 1)
 
 # Calculate the mean and standard deviation for the rlog normalized matrix, by row
 # (i.e. for a gene across all samples)
-mn = apply(assay_rld, 1, mean, na.rm = TRUE)
-stdev = apply(assay_rld, 1, sd, na.rm = TRUE)
+mn = apply(matrix_norm, 1, mean, na.rm = TRUE)
+stdev = apply(matrix_norm, 1, sd, na.rm = TRUE)
 
-print("*** Applying a Z-transformation to the matrix ***")
 # Apply a Z-trasnformation, so that gene means = 0, gene sd = 1
-Z = (assay_rld - mn) / stdev
+Z = (matrix_norm - mn) / stdev
+
+par(mfrow = c(1, 2))
 
 ## Generate plots
-#plot(mn, stdev)
-#plot(rowMeans(Z), genefilter::rowSds(Z))
+# plot(mn, stdev)
+# plot(rowMeans(Z), genefilter::rowSds(Z))
 
 print("*** Saving the output files to the results folder ***")
 # Save the normalized matrix
