@@ -17,5 +17,7 @@ In order to run:
   - PARENT_DIR=~/path/2/your/parent/folder
   - JSON_FILE_NAME=name_of_your_json.json
   
- 5. In the terminal, cd to the parent_folder/scripts and run the following command:
+ 5. Change the variables in the json file to fit your file paths and desired parameters. 
+  
+ 6. In the terminal, cd to the parent_folder/scripts and run the following command:
  bash bash_automated_pca.sh
