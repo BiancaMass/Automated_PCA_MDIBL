@@ -9,15 +9,17 @@ In order to run:
 - results
 - report
 
-2. Save your data (estimated count matrices and design files) in the data folder, as well as the json input file.
+2. Save your data (estimated count matrices and design files) in the data folder, together with the json input file.
 
 3. Save the scripts in the scripts folder
 
-4. Change the following variables in the bash script:
+4. Open the bash script "bash_automated_pca.sh"
+
+5. Change the following variables in the bash script:
   - PARENT_DIR=~/path/2/your/parent/folder
   - JSON_FILE_NAME=name_of_your_json.json
   
- 5. Change the variables in the json file to fit your file paths and desired parameters. 
+ 5. Change the variables in the json file to fit your file paths and desired parameters (see the README  inside the data folder).
   
  6. In the terminal, cd to the parent_folder/scripts and run the following command:
  bash bash_automated_pca.sh
