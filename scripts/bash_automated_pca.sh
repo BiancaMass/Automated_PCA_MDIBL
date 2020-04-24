@@ -46,17 +46,17 @@ echo Leaving step_04.R
 
 echo "********************************************"
 echo Entering step_05.R
-#Rscript step_05.R ${JSON_PATH}
+Rscript step_05.R ${JSON_PATH}
 echo Leaving step_05.R
 
 echo "********************************************"
 echo Entering step_06.R
-#Rscript step_06.R ${JSON_PATH}
+Rscript step_06.R ${JSON_PATH}
 echo Leaving step_06.R
 
 echo "********************************************"
 echo Entering step_07.R
-#Rscript step_07.R ${JSON_PATH}
+Rscript step_07.R ${JSON_PATH}
 echo Leaving step_07.R
 
 

@@ -2,7 +2,7 @@
 ## for 1->N, 2->N, until (N-2)->N and finds the meaningful PCs by setting
 ## a cutoff for slope change = 0.5
 ## It adds the coordinate of individual observations for each sample on each meaningful
-## PC to the design file as new columns (PC1, PC2...PCN where N = last meeaningful PC)
+## PC to the design file as new columns (PC1, PC2...PCN where N = last meaningful PC)
 
 args = base::commandArgs(trailingOnly = TRUE)
 print(args)

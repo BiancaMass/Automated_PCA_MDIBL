@@ -1,6 +1,6 @@
 ## A script that for each meaningful principal component regresses on the design equation variables.
 ## Standards to determine whether the component has an association with experimental design:
-## p-value <= 0.5
+## p-value <= 0.06
 ## abs(slope) >= 0.3
 
 args = base::commandArgs(trailingOnly = TRUE)
@@ -62,7 +62,7 @@ labels=list(unique(variable_pca)[1], unique(variable_pca)[2])
 #        xlab = "Samples", ylab = "PC value",
 #        pch = 1, col = categorical_variable, frame = FALSE)
 #   abline(lm(pca$x[,i] ~ categorical_variable), col = "blue")
-#   legend("topright", legend = c(unique(variable_pca)[1], unique(variable_pca)[2]),
+#   legend("top", legend = c(unique(variable_pca)[1], unique(variable_pca)[2]),
 #   pch = 1, col = 1:2)
 # }
 
@@ -70,19 +70,19 @@ labels=list(unique(variable_pca)[1], unique(variable_pca)[2])
 ## Standards chosen: p-value = 0.5
 ## abs(slope) >= 0.3
 
+significant_results = data.frame(pc_num  = rep(NA, number_PC),
+                                 cor = rep(NA, number_PC),
+                                 pv  = rep(NA, number_PC))
+
+
 for (i in 1:nrow(results)){
-  if((results$pv)[i] <= 0.5) {
-    significant_results = results[i, ]
+  if((results$pv)[i] <= 0.06 & (abs((results$cor)[i]) >= 0.3)) {
+    significant_results[i, ] = results[i, ]
   }
 }
 
-for (i in 1:nrow(significant_results)){
-  if(abs((results$cor)[i]) >= 0.3) {
-    significant_results = results[i, ]
-  }
-}
-
-
+output_sig_res = file.path(parent_folder, "results", paste0(experiment, "_significant_PC_vs_designformula.txt"))
+write.table(significant_results, file = output_sig_res, sep = '\t')
 
 #citation("pcaMethods")
 

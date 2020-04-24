@@ -85,7 +85,7 @@ pca.var.per <- round(pcavar/sum(pcavar)*100,1)
 #   geom_text() +
 #   xlab(paste("PC1: ", pca.var.per[1], "%", sep = ""))+
 #   ylab(paste("PC2: ", pca.var.per[2], "%", sep = ""))+
-#   theme_bw() + 
+#   theme_bw() +
 #   ggtitle(paste("PC1 vs PC2", "| Experiment: ", experiment))
 
 ### Generate a loading scores table ##
