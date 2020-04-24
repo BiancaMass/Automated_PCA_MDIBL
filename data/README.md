@@ -1,4 +1,4 @@
-## Data Repository
+# Data Repository
 
 This README file is divided into three sections:
   1. A description of the required format for the design file
@@ -6,5 +6,10 @@ This README file is divided into three sections:
   1. A description of the required format for the JSON file
 
 
-1. Design file
-The 
+# 1. Design file
+
+
+# 1. Estimated count matrix
+
+
+# 1. JSON
