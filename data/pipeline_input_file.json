@@ -1,0 +1,29 @@
+{
+  "input_files": {
+    "infile1":"/home/mbianca/Documents/senior_project/automated_pca/data/vyin_007.design.txt",
+    "infile2":"/home/mbianca/Documents/senior_project/automated_pca/data/vyin_007.estCounts.txt",
+    "experiment_name": "vyin_007"
+  },
+  
+  "folders":{
+    "parent_folder":"/home/mbianca/Documents/senior_project/automated_pca"
+  },
+  
+  "input_varibles":{
+    "mean_precentage_threshold":0.25,
+    "sd_precentage_threshold":0.25,
+    "min_count_mean":0
+    
+  },
+  
+  "output_file":{
+    "outfile1":""
+    
+  },
+    
+    "design_formula":{
+            "design1":"treatment",
+            "design2":""
+    }
+    
+}
