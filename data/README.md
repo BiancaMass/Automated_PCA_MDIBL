@@ -18,5 +18,13 @@ The json file contains a list of variables in the form of file paths or numbers.
 - "input_files":
     - "infile1":"path/to/design_file.txt",
     - "infile2":"path/to/estcountsmatrix.txt",
-    - "experiment_name": "name_of_your_experiment" #this will be used to name the output files automatically saved in /results
+    - "experiment_name": "name_of_your_experiment" (used to name the output files automatically saved in /results directory)
+    
+- "folders":
+   - "parent_folder":"path/to/your/parent_folder" (containing /data, /results, /scripts, /report)
+   
+- "input_varibles":
+    - "mean_precentage_threshold":0.25,
+    - "sd_precentage_threshold":0.25,
+    - "min_count_mean":0
 
