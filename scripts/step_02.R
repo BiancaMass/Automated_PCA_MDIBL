@@ -23,11 +23,11 @@ library(stringr)
 json = read_json(path2_json_file)
 
 # Extract the input file paths and variables from json
-parent_folder = json[[1]]$"folders"$"parent_folder"
-experiment = json[[1]]$"input_files"$"experiment_name"
-path2_design = json[[1]]$"input_files"$"infile1"
-path2_counts = json[[1]]$"input_files"$"infile2"
-min_mean = json[[1]]$"input_varibles"$"min_count_mean"
+parent_folder = json$"folders"$"parent_folder"
+experiment = json$"input_files"$"experiment_name"
+path2_design = json$"input_files"$"infile1"
+path2_counts = json$"input_files"$"infile2"
+min_mean = json$"input_varibles"$"min_count_mean"
 
 # Read in the design and estimated counts files
 design = read.table(path2_design, header = TRUE, sep = "\t", row.names = 1)
@@ -54,7 +54,7 @@ if (sum(counts != apply(counts, 2, as.integer)) > 0) { print("Error: not all num
 counts_mean = apply(counts, 1, mean, na.rm = TRUE)
 counts_stdev = apply(counts, 1, sd, na.rm = TRUE)
 
-# plot(counts_mean, counts_stdev)
+#plot(counts_mean, counts_stdev)
 
 # Save the matrix of gene means
 output_mean = file.path(parent_folder, "results", paste0(experiment, "_genecounts_means.txt"))
@@ -66,21 +66,13 @@ write.table(counts_stdev, file = output_sd, sep = '\t')
 # Construct the DeSeq data set to apply rlog()
 print("*** Constructing the DESeq Data set ***")
 
-# Extract the additive covariates from the design file:
-for (i in 1:(length(json[[1]]$additive_covar))){
-  if (str_length(json[[1]]$additive_covar[[i]]) > 0){
-    nam <- paste0("additive", i)
+# Extract the design formula from the json to use to perform PCA:
+# Note: the design formula needs to match the column name in the design file.
+for (i in 1:(length(json$design_formula))){
+  if (str_length(json$design_formula[[i]]) > 0){
+    nam <- paste0("formula", i)
     print(nam)
-    assign(nam, json[[1]]$additive_covar[[i]])
-  }
-}
-
-# Extract the interactive covariates from the design file:
-for (i in 1:(length(json[[1]]$interactive_covar))){
-  if (str_length(json[[1]]$additive_covar[[i]]) > 0){
-    nam <- paste0("additive", i)
-    print(nam)
-    assign(nam, json[[1]]$additive_covar[[i]])
+    assign(nam, json$design_formula[[i]])
   }
 }
 

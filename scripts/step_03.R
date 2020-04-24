@@ -22,8 +22,8 @@ print("*** Reading the input files ***")
 json = read_json(path2_json_file)
 
 # File paths to parent folder, and input file (normalized matrix from step_02.R i.e. rld or vsd matrix)
-parent_folder = json[[1]]$"folders"$"parent_folder"
-experiment = json[[1]]$"input_files"$"experiment_name"
+parent_folder = json$"folders"$"parent_folder"
+experiment = json$"input_files"$"experiment_name"
 
 if (file.exists(file.path(parent_folder, "results", paste0(experiment,"_rld_normalized.txt")))){
   input_matrix = file.path(parent_folder, "results", paste0(experiment,"_rld_normalized.txt"))
@@ -44,9 +44,15 @@ stdev = apply(matrix_norm, 1, sd, na.rm = TRUE)
 # Apply a Z-trasnformation, so that gene means = 0, gene sd = 1
 Z = (matrix_norm - mn) / stdev
 
-par(mfrow = c(1, 2))
+# Save a Z table with mn and stdev (before Z norm, after rlog/vst) columns:
+Z_ms = cbind(Z, mn)
+Z_ms = cbind(Z_ms, stdev)
+
+output_Z_ms = file.path(parent_folder, "results", paste0(experiment, "_Z_mean_stdev.txt"))
+write.table(Z_ms, file = output_Z_ms, sep = '\t')
 
 ## Generate plots
+# par(mfrow = c(1, 2))
 # plot(mn, stdev)
 # plot(rowMeans(Z), genefilter::rowSds(Z))
 
