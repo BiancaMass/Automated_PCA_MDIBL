@@ -1,0 +1,101 @@
+---
+title: "Final Report"
+output: html_document
+---
+
+```{r}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
+# Read the json file:
+path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
+json = read_json(path2_json_file)
+```
+
+
+```{r echo = FALSE}
+print(Sys.time())
+```
+
+In this report you will find:
+
+- Information about the input files (design matrix and estimated count matrix)
+
+- A summary of what each step in the pipeline does
+
+- Summary plots
+
+## Input files
+The input file can be found at the following location on your machine:
+```{r}
+path_2_design_file = json$input_files$infile1
+path_2_counts_file = json$input_files$infile2
+print(path_2_design_file)
+print(path_2_counts_file)
+```
+
+Design file:
+```{r}
+design = read.table(path_2_design_file, header = TRUE, sep = "\t", row.names = 1)
+counts = read.table(path_2_counts_file, header = TRUE, sep = "\t", row.names = 1)
+kable(design)
+```
+
+Estimated counts matrix:
+
+```{r}
+kable(head(counts))
+```
+
+Summary of the estimated counts matrix:
+
+```{r}
+kable(summary(counts))
+```
+
+## Scripts
+
+### step_01.R
+Step 1 in the pipeline makes sure that the input files are valid and compatible with the pipeline requirements. It performs the following operations:
+- Checks that design and counts files exist
+- Checks that design and counts files are not empty
+- Prints a warning message if the est. count matrix has NAs
+- Checks for a 1-1 correspondence between the rownames of the design file and the column names of the est. counts file
+
+### step_02.R
+Step 2 in the pipeline normalizes the matrix using rlog() or vst() depending whether sample number is, respectively, <= 30 or >30.
+The normalized matrix can be found at:
+
+```{r}
+path2_matrix_norm_1 = file.path(parent_folder, "results", paste0(experiment, "_rld_normalized.txt"))
+print(path2_matrix_norm_1)
+```
+
+Head of the normalized matrix:
+
+```{r}
+norm_1 = read.table(path2_matrix_norm_1, header = TRUE, sep = "\t", row.names = 1)
+kable(head(norm_1))
+```
+
+Summary of the normalized matrix:
+```{r}
+summary(norm_1)
+```
+
+### step_03.R
+
+
+
+
+
+
+
+
+
+
+
+
+
+

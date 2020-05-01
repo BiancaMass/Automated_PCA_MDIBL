@@ -54,7 +54,7 @@ if (sum(counts != apply(counts, 2, as.integer)) > 0) { print("Error: not all num
 counts_mean = apply(counts, 1, mean, na.rm = TRUE)
 counts_stdev = apply(counts, 1, sd, na.rm = TRUE)
 
-#plot(counts_mean, counts_stdev)
+# plot(counts_mean, counts_stdev)
 
 # Save the matrix of gene means
 output_mean = file.path(parent_folder, "results", paste0(experiment, "_genecounts_means.txt"))
@@ -73,13 +73,25 @@ for (i in 1:(length(json$design_formula))){
     nam <- paste0("formula", i)
     print(nam)
     assign(nam, json$design_formula[[i]])
+    last_number = i
   }
 }
+
+  if(last_number == 1){
+    design_formula <- as.formula( paste( "~", as.name(formula1)) ) 
+  } else if(last_number == 2){
+    design_formula <- as.formula( paste( "~", as.name(formula1),"+", as.name(formula2) ) )
+  } else {
+    print("error in creating the design formula.
+          Go back to the JSON file anch chek that under design formula
+          min. 1 and max. 2 terms are defined")
+  }
+
 
 ## Construct the DeSeq data set using the countdata (countmatrix) and coldata (sample information)
 dds <- DESeqDataSetFromMatrix(countData = counts,
                               colData = design,
-                              design = ~ treatment
+                              design = design_formula
 )
 
 print("*** Normalizing the expression matrix using rlog or vst***")

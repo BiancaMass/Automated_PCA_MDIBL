@@ -53,18 +53,18 @@ for (i in 1:number_PC){
 
 labels=list(unique(variable_pca)[1], unique(variable_pca)[2])
 
-# par(mfrow = c(1, number_PC))
-# 
-# for (i in 1:number_PC){
-#   x <- categorical_variable
-#   y <- pca$x[,i]
-#   plot(x, y, main = c("PC", i),
-#        xlab = "Samples", ylab = "PC value",
-#        pch = 1, col = categorical_variable, frame = FALSE)
-#   abline(lm(pca$x[,i] ~ categorical_variable), col = "blue")
-#   legend("top", legend = c(unique(variable_pca)[1], unique(variable_pca)[2]),
-#   pch = 1, col = 1:2)
-# }
+par(mfrow = c(1, number_PC))
+
+for (i in 1:number_PC){
+  x <- categorical_variable
+  y <- pca$x[,i]
+  plot(x, y, main = c("PC", i),
+       xlab = "Samples", ylab = "PC value",
+       pch = 1, col = categorical_variable, frame = FALSE)
+  abline(lm(pca$x[,i] ~ categorical_variable), col = "blue")
+  legend("top", legend = c(unique(variable_pca)[1], unique(variable_pca)[2]),
+  pch = 1, col = 1:2)
+}
 
 ## Find the principal component that explain the design equation
 ## Standards chosen: p-value = 0.5

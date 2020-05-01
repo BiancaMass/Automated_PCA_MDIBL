@@ -58,15 +58,15 @@ sd_subset <- subset(raw_sd, raw_sd[,1] > sd_quantile)
 
 par(mfrow = c(2, 2))
 
-hist(log(raw_sd), xlim = c(-1, 20), breaks = 100)
-abline(v=log(sd_quantile), col = 'red')
-
-plot(raw_means, raw_sd)
+# hist(log(raw_sd), xlim = c(-1, 20), breaks = 100)
+# abline(v=log(sd_quantile), col = 'red')
+# 
+# plot(raw_means, raw_sd)
 # plot.new()
 # hist(raw_means, xlim = c(-1, 50), breaks = 1000000)
 # abline(v=(mean_quantile), col = 'red')
-hist(log(raw_means), xlim = c(-1, 20), breaks = 100)
-abline(v=log(mean_quantile), col = 'red')
+# hist(log(raw_means), xlim = c(-1, 20), breaks = 100)
+# abline(v=log(mean_quantile), col = 'red')
 
 
 # Subsetting the data set for a min average and variance in expression levels

@@ -22,6 +22,7 @@ library(jsonlite)
 library(dplyr)
 library(factoextra)
 library(readr)
+library(latticeExtra)
 #library(broom)
 
 # Read in input files:
@@ -46,32 +47,49 @@ pca = read_rds(path_2_pca)
 pca_eigenvalue$dimension = 1:nrow(pca_eigenvalue)
 options(scipen = 999) #to avoid display in scientific notation
 pca_variation = round(pca_eigenvalue$variance.percent, 3)
-#plot(pca_variation)
+# convert to log10
+pca_var_log = log10(pca_variation)
+plot(pca_variation)
+plot(pca_var_log)
 
 # Create an empty table to save coefficients
 number_PC = nrow(pca_eigenvalue)
-res = data.frame(model_num  = rep(0, number_PC-2),
-                 slope = rep(0,number_PC-2),
-                 intercept = rep(0, number_PC-2))
+res = data.frame(model_num  = rep(0, number_PC-3),
+                 slope = rep(0,number_PC-3),
+                 intercept = rep(0, number_PC-3),
+                 R_squared = rep(0, number_PC-3),
+                 adj_R_squared = rep(0, number_PC-3))
 
 ### Find meaningful components ###
 
-# Performing linear regression on the % Eigenvalues vs component number for 1->N, 2->N, until (N-3)->N
+# Performing linear regression on the log10 of the % Eigenvalues vs component number for 1->N, 2->N, until (N-3)->N
 # Note: there is so substantial difference in doing it on raw Eigenvaues vs %, but percentage is easier to read.
-# Warning: doing up to (N-2)->N
-for (i in 1:(number_PC-2)){
-  # excluding last dimension b/c it is 0:
-  linear = lm(pca_eigenvalue$variance.percent[i:(number_PC-1)] ~ pca_eigenvalue$dimension[i:(number_PC-1)])
+# Warning: doing up to (N-3)->N or up to 10 PCs
+
+# add a threshold for max 10 PCs (as a variable in the JSON)
+# to the table add R^2 and a normalized R^2 (divided by number_PC-N)
+
+for (i in 1:(number_PC-3)){
+  linear = lm(pca_var_log[i:(number_PC-2)] ~ pca_eigenvalue$dimension[i:(number_PC-2)])
   res$model_num[i] = i
   res$intercept[i] = coef(linear)[1]
   res$slope[i] = coef(linear)[2]
+  res$R_squared[i] = summary(linear)$r.squared
+  res$adj_R_squared[i] = summary(linear)$adj.r.squared
 }
 # visualize the correlations:
-# color = list("brown4" ,"red", "orange", "yellow")
-# color[2]
-# for (i in 1:(nrow(res))){
-#   abline(a = res$intercept[i], b = res$slope[i], col = color[[i]])
-# }
+colfunc <- colorRampPalette(c("blue4",
+                              "deepskyblue",
+                              "darkolivegreen1",
+                              "darkgreen",
+                              "red"))
+colors = colfunc(nrow(res))
+plot(pca_var_log)
+for (i in 1:(nrow(res))){
+  abline(a = res$intercept[i], b = res$slope[i], col = colors[i])
+  text(x=number_PC-2, y=(i * 0.1)+0.6, labels=paste0("model # ", i, "->", "N-3"), col = colors[i])
+}
+
 
 #to gt the p.value (which I do not think I will need)
 #glance(linear)$p.value
@@ -107,6 +125,10 @@ write.table(design_meaningful_PC, file = output_design_meaningful, sep = '\t')
 
 
 
+
+# Outputs:
+
+# A design file with the meaningful PCs.
 
 
 

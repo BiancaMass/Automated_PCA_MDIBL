@@ -33,8 +33,6 @@ path2_count = file.path(parent_folder, "results", paste0(experiment , "_Z_thresh
 ### Read in the filtered count matrix and the design file ###
 filt_count = as.matrix(read.table(path2_count, sep = "\t", header = TRUE, row.names = 1))
 design = read.table(path2_design, sep = "\t", header = TRUE, row.names = 1)
-# !!!!! Assumes treatment is column 3 !!!!
-# pca_variable = colnames(design)[3]
 
 
 # **************** Start of the program **********************
@@ -64,29 +62,36 @@ pca = prcomp(t(filt_count), scale = TRUE)
 # Scree plot generation:
 pcavar <- pca$sdev^2
 pca.var.per <- round(pcavar/sum(pcavar)*100,1)
-# barplot(pca.var.per, main = 'Scree Plot', xlab= "Principal Component #",
-#         ylab = "Percent Variation")
-#fviz_eig(pca) # another way to visualize percentage contribution
+# with log scale:
+#pca.var.per <- log(round(pcavar/sum(pcavar)*100,1))
+barplot(pca.var.per, main = 'Scree Plot', xlab= "Principal Component #",
+        ylab = "Percent Variation", ylim = c(0.001,100))
+# fviz_eig(pca) # another way to visualize percentage contribution
 
 ### Ggplot plot for the report ###
 # Format the data the way ggplot2 likes it:
-# pca.data <- data.frame(Sample = rownames(pca$x),
-#                        PC1 = pca$x[,1],
-#                        PC2 = pca$x[,2],
-#                        PC3 = pca$x[,3],
-#                        PC4 = pca$x[,4],
-#                        PC5 = pca$x[,5],
-#                        PC6 = pca$x[,6])
-# 
-# design$Sample = row.names(design)
-# pca.data = dplyr::left_join(pca.data, design, by = "Sample")
-# ggplot(data = pca.data, aes(x = PC1, y = PC2, label = Sample,
-#                             color = treatment)) +
-#   geom_text() +
-#   xlab(paste("PC1: ", pca.var.per[1], "%", sep = ""))+
-#   ylab(paste("PC2: ", pca.var.per[2], "%", sep = ""))+
-#   theme_bw() +
-#   ggtitle(paste("PC1 vs PC2", "| Experiment: ", experiment))
+# numbers are hard coded
+pca.data <- data.frame(Sample = rownames(pca$x),
+                       PC1 = pca$x[,1],
+                       PC2 = pca$x[,2],
+                       PC3 = pca$x[,3],
+                       PC4 = pca$x[,4],
+                       PC5 = pca$x[,5],
+                       PC6 = pca$x[,6],
+                       PC7 = pca$x[,7],
+                       PC8 = pca$x[,8],
+                       PC9 = pca$x[,9]
+                       )
+
+design$Sample = row.names(design)
+pca.data = dplyr::left_join(pca.data, design, by = "Sample")
+ggplot(data = pca.data, aes(x = PC1, y = PC2, label = site,
+                            color = treatment)) +
+  geom_text() +
+  xlab(paste("PC1: ", pca.var.per[1], "%", sep = ""))+
+  ylab(paste("PC2: ", pca.var.per[2], "%", sep = ""))+
+  theme_bw() +
+  ggtitle(paste("PC1 vs PC2", "| Experiment: ", experiment))
 
 ### Generate a loading scores table ##
 loadings = pca$rotation
