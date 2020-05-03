@@ -72,7 +72,6 @@ print("*** Constructing the DESeq Data set ***")
 for (i in 1:(length(json$design_formula))){
   if (str_length(json$design_formula[[i]]) > 0){
     nam <- paste0("formula", i)
-    print(nam)
     assign(nam, json$design_formula[[i]])
     last_number = i
   }
@@ -100,8 +99,8 @@ dds <- DESeqDataSetFromMatrix(countData = counts,
 path_2_json_copy = file.path(parent_folder, "results", "pipeline_input_file_copy.json")
 json_output <- read_json(path_2_json_copy)
 #json_output = as.list(json_output)
-json_output$path_2_results$"genecounts_means" = list(output_mean)
-json_output$path_2_results$"genecounts_sd" = list(output_sd)
+json_output$path_2_results$"genecounts_means" = output_mean
+json_output$path_2_results$"genecounts_sd" = output_sd
 
 
 print("*** Normalizing the expression matrix using rlog or vst***")
@@ -115,13 +114,13 @@ if (ncol(assay(dds)) <=30) {
   rld_assay <- assay(rld)
   output_matrix = file.path(parent_folder, "results", paste0(experiment,"_rld_normalized.txt"))
   write.table(rld_assay, file = output_matrix, sep = '\t')
-  json_output$path_2_results$"normalized_rld" = list(output_matrix)
+  json_output$path_2_results$"normalized_rld" = output_matrix
 } else {
    vsd <- vst(dds, blind = FALSE)
    vsd_assay <- assay(vsd)
    output_matrix = file.path(parent_folder, "results", paste0(experiment,"_vst_normalized.txt"))
    write.table(vsd_assay, file = output_matrix, sep = '\t')
-   json_output$path_2_results$"normalized_vsd" = list(output_matrix)
+   json_output$path_2_results$"normalized_vst" = output_matrix
 }
 
 write_json(json_output, path_2_json_copy)

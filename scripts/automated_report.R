@@ -1,6 +1,6 @@
 # A script that automatically generates a report of the pipeline
 
-
+# Hard-coded to test
 path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
 
 library(knitr)
@@ -21,11 +21,11 @@ rmarkdown::render(report_file,
                   output_dir = output_directory)
 
 
-knit(report_file,
-     output = output_path,
-     tangle = FALSE,
-     text = NULL,
-     quiet = FALSE,
-     envir = parent.frame(),
-     encoding = "UTF-8"
-     )
+# knit(report_file,
+#      output = output_path,
+#      tangle = FALSE,
+#      text = NULL,
+#      quiet = FALSE,
+#      envir = parent.frame(),
+#      encoding = "UTF-8"
+#      )

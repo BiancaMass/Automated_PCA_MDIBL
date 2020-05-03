@@ -48,18 +48,26 @@ Z = (matrix_norm - mn) / stdev
 Z_ms = cbind(Z, mn)
 Z_ms = cbind(Z_ms, stdev)
 
-output_Z_ms = file.path(parent_folder, "results", paste0(experiment, "_Z_mean_stdev.txt"))
-write.table(Z_ms, file = output_Z_ms, sep = '\t')
-
 ## Generate plots
 # par(mfrow = c(1, 2))
 # plot(mn, stdev)
 # plot(rowMeans(Z), genefilter::rowSds(Z))
 
 print("*** Saving the output files to the results folder ***")
-# Save the normalized matrix
+# Save the normalized matrix and the normalized matrix with mean and sd columns added to the end
 output_Z = file.path(parent_folder, "results", paste0(experiment, "_Z_normalized.txt"))
 write.table(Z, file = output_Z, sep = '\t')
 
+output_Z_ms = file.path(parent_folder, "results", paste0(experiment, "_Z_mean_stdev.txt"))
+write.table(Z_ms, file = output_Z_ms, sep = '\t')
+
+
+# For the automated report:
+path_2_json_copy = file.path(parent_folder, "results", "pipeline_input_file_copy.json")
+json_output <- read_json(path_2_json_copy)
+#json_output = as.list(json_output)
+json_output$path_2_results$"Z_table" = output_Z
+json_output$path_2_results$"Z_with_mean_sd" = output_Z_ms
+write_json(json_output, path_2_json_copy)
 
 

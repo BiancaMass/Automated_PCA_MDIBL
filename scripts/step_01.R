@@ -94,6 +94,6 @@ write.table(design,
 
 json_modified = json
 path_json_modified = file.path(parent_folder, "results", "pipeline_input_file_copy.json")
-json_modified$"path_2_results"$"design_file" = list(file2_design_copy)
+json_modified$"path_2_results"$"design_file" = file2_design_copy
 write_json(json_modified, path_json_modified)
 

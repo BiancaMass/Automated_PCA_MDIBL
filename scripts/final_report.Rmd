@@ -1,17 +1,24 @@
 ---
 title: "Final Report"
 output: html_document
+Author: "Bianca Matilde Massacci"
 ---
 
 ```{r}
 knitr::opts_chunk$set(echo = FALSE)
 library(jsonlite)
+library(ggplot2)
+library(grid)
+library(gridExtra)
+library(genefilter)
 ```
 
 ```{r}
 # Read the json file:
-path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file_copy.json"
+path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
 json = read_json(path2_json_file)
+parent_folder = file.path(json$folders$parent_folder)
+json_copy = read_json(file.path(parent_folder, "results", "pipeline_input_file_copy.json"))
 ```
 
 ```{r echo = FALSE}
@@ -35,68 +42,147 @@ print(path_2_design_file)
 print(path_2_counts_file)
 ```
 
-Design file:
 ```{r}
 design = read.table(file.path(path_2_design_file), header = TRUE, sep = "\t", row.names = 1)
 counts = read.table(file.path(path_2_counts_file), header = TRUE, sep = "\t", row.names = 1)
-kable(design)
+kable(design, caption = "Input design matrix.")
 ```
 
-Estimated counts matrix:
-
 ```{r}
-kable(head(counts))
+kable(head(counts), caption = "The first 6 rows of the input estimated counts matrix")
 ```
 
-Summary of the estimated counts matrix:
-
 ```{r}
-kable(summary(counts))
+kable(summary(counts), caption ="Statistical summary of the estimated counts matrix.")
 ```
 
 ## Scripts
 
 ### step_01.R
 Step 1 in the pipeline makes sure that the input files are valid and compatible with the pipeline requirements. It performs the following operations:
+
 - Checks that design and counts files exist.
+
 - Checks that design and counts files are not empty.
+
 - Prints a warning message if the est. count matrix has NAs.
+
 - Checks for a 1-1 correspondence between the rownames of the design file and the column names of the est. counts file.
 
 ### step_02.R
 Step 2 in the pipeline normalizes the matrix using rlog() or vst() depending whether sample number is, respectively, <= 30 or >30.
 It performs the following operations:
-- Rounds the count matrix, remove rows of <= 1 counts, and filters for rows with a mean above the mean threshold set in the JSON file.
+
+- Rounds the count matrix
+
+- Remove rows with few counts according to the variable set in the json:input_variables:min_gene_tot_raw_count.
+
+- Filters for rows with a mean above the mean threshold set in the json:input_variables:mean_precentage_threshold.
+
 - Calculates mean and standard deviation for each gene across all samples.
+
+- Constructs a DESeq data set using the counts matrix, the design matrix, and as a design formula the one indicated in json:design_formula:design1 and, if present design 2.
+
+- Uses rlog() or vst() to normalized the count matrix, preparing it for PCA.
 
 The gene means and standard deviations (before any normalization) can be found at:
 
 ```{r}
-counts_mean = json$path_2_results$
+path_2_counts_mean = unlist(json_copy$path_2_results$genecounts_means)
+path_2_counts_sd   = unlist(json_copy$path_2_results$genecounts_sd)
+raw_counts_means = read.table(path_2_counts_mean, header = TRUE, sep = "\t", row.names = 1)
+raw_counts_sd = read.table(path_2_counts_sd, header = TRUE, sep = "\t", row.names = 1)
+raw_counts_means$gene_id = rownames(raw_counts_means)
+raw_counts_means$mean = raw_counts_means$x
+raw_counts_means = raw_counts_means%>%select(-x)
+raw_counts_sd$gene_id = rownames(raw_counts_sd)
+raw_counts_sd$standdev = raw_counts_sd$x
+raw_counts_sd = raw_counts_sd%>%select(-x)
+raw_mean_sd = left_join(raw_counts_means, raw_counts_sd, by = "gene_id")
+print(paste("gene counts means: ", path_2_counts_mean))
+print(paste("gene counts standard deviations: ", path_2_counts_sd))
 ```
-
 
 The normalized matrix can be found at:
 
 ```{r}
-path2_matrix_norm_1 = file.path(parent_folder, "results", paste0(experiment, "_rld_normalized.txt"))
+if (file.exists(unlist(json_copy$path_2_results$normalized_rld))){
+  path2_matrix_norm_1 = unlist(json_copy$path_2_results$normalized_rld)
+} else if (file.exists(unlist(json_copy$path_2_results$normalized_vst))) {
+  path2_matrix_norm_1 = unlist(json_copy$path_2_results$normalized_vst)
+} else {print("There must have been an error in the running of the pipeline.
+              Please check that all your input files match the requirements.
+              If they do, refer to step_02.R for debugging.
+              Feel free to contact the author if you have any questions.")}
+
 print(path2_matrix_norm_1)
 ```
 
 
-Head of the normalized matrix:
-
 ```{r}
 norm_1 = read.table(path2_matrix_norm_1, header = TRUE, sep = "\t", row.names = 1)
-kable(head(norm_1))
+kable(head(norm_1), caption = "The first six rows of the matrix after vsd() or rld() normalization.")
 ```
 
-Summary of the normalized matrix:
 ```{r}
-summary(norm_1)
+kable(summary(norm_1), caption = "Statistical summary of the vsd() or rld() normalized matrix.")
 ```
 
 ### step_03.R
+Step 3 further normalized the matrix appliying a Z-transformation such that $Z = (x-mean) / standard  deviation$ .
+
+The Z table (after normalization) can be found at:
+```{r}
+path2_Z = unlist(json_copy$path_2_results$Z_table)
+print(path2_Z)
+Z = read.table(path2_Z, sep = '\t', header = TRUE,  row.names = 1)
+```
+
+A Z table with two column added, one for mean and one for standard deviation of each gene across samples, can be found at:
+```{r}
+path2_Z_mn_sd = unlist(json_copy$path_2_results$Z_with_mean_sd)
+print(path2_Z_mn_sd)
+Z_mn_sd = read.table(path2_Z_mn_sd, sep = '\t', header = TRUE,  row.names = 1)
+# For the plot below:
+mn_stdev_of_Z = data.frame(means_of_Z = rowMeans(Z),
+                     stdev_of_Z = genefilter::rowSds(Z))
+```
+
+- Remove rows with few counts according to the variable set in the json:input_variables:min_gene_tot_raw_count.
+
+- Filters for rows with a mean above the mean threshold set in the json:input_variables:mean_precentage_threshold.
+
+- Calculates mean and standard deviation for each gene across all samples.
+
+```{r fig.width=10, fig.height=5, fig.fullwidth=TRUE,mn_stdev_of_Z, fig.cap = "Meand and standard deviation after each subsequent transformation. A: mean vs standard deviation for the est. counts matrix after removing NAs, rows with few counts according to the variable set in the JSON, and filtered for rows with a mean above the minimum threshold as set in the JSON. B: mean vs standard deviation after rld() or vsd() transformation. C: mean vs standard deviation after Z transformation. If the pipeline worked properlu, mean should be very close to 0 and standard deviations should be == 1"}
+plot1 = ggplot()+
+  geom_point(aes(raw_mean_sd$mean, raw_mean_sd$standdev))+
+  ggtitle("A. Raw counts")+
+  theme(axis.text.x = element_text(angle = 90))+
+  scale_x_continuous(labels = function(x) format(x, scientific = TRUE))+
+  scale_y_continuous(labels = function(x) format(x, scientific = TRUE))+
+  xlab("Mean") + ylab("Standard deviation")
+
+plot2 = ggplot()+
+  geom_point(aes(Z_mn_sd$mn, Z_mn_sd$stdev))+
+  ggtitle("B. After rld() | vsd()")+
+  theme(axis.text.x = element_text(angle = 90))+
+  scale_x_continuous(labels = function(x) format(x, scientific = TRUE))+
+  scale_y_continuous(labels = function(x) format(x, scientific = TRUE))+
+  xlab("Mean") + theme(axis.title.y = element_blank())
+
+plot3 = ggplot()+
+  geom_point(aes(mn_stdev_of_Z$means_of_Z, mn_stdev_of_Z$stdev_of_Z))+
+  ggtitle("C. After Z transformation")+
+  theme(axis.text.x = element_text(angle = 90))+
+  scale_x_continuous(labels = function(x) format(x, scientific = TRUE))+
+  scale_y_continuous(labels = function(x) format(x, scientific = TRUE))+
+  xlab("Mean") + theme(axis.title.y = element_blank())
+
+grid.arrange(plot1, plot2, plot3, ncol = 3)
+```
+
+
 
 
 
