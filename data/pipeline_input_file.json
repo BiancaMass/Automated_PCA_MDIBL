@@ -1,8 +1,8 @@
 {
   "input_files": {
-    "infile1":"/home/mbianca/Documents/senior_project/automated_pca/data/vyin_007.design.txt",
-    "infile2":"/home/mbianca/Documents/senior_project/automated_pca/data/vyin_007.estCounts.txt",
-    "experiment_name": "vyin_007"
+    "infile1":"/home/mbianca/Documents/senior_project/automated_pca/data/vyin_008.mouse_heart_msi1436_2017.all.design.txt",
+    "infile2":"/home/mbianca/Documents/senior_project/automated_pca/data/deleteme.vyin_008.mouse_heart_msi1436_2017.all.counts.txt",
+    "experiment_name": "vyin_008.mouse_heart_msi1436_2017"
   },
   
   "folders":{
@@ -16,14 +16,26 @@
     
   },
   
-  "output_file":{
-    "outfile1":""
+  "output_files":{
+    "design_file":"",
+    "counts_means":"",
+    "counts_sd":"",
+    "normalized_counts":"",
+    "Z_normalized":"",
+    "Z_mean_sd":"",
+    "Z_filtered":"",
+    "loading_scores":"",
+    "eigen_values":"",
+    "pca_object":""
+    
+    
     
   },
     
     "design_formula":{
-            "design1":"treatment",
-            "design2":""
+            "design1":"site",
+            "design2":"treatment"
+            
     }
     
 }
