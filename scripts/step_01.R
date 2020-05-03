@@ -8,7 +8,7 @@ path2_json_file = args[1]
 # **********************************************************************
 
 # Hard coded to test
-#path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
+# path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
 
 # Load the necessary libraries
 print("Loading libraries: jsonlite")
@@ -58,12 +58,6 @@ if(sum(is.na(counts)) > 0){
   print('--- Warning: there are NAs in the count matrix')
 }
 
-# Print the head of counts matrix and design files to the terminal
-print("*** Design file ***", quote = FALSE)
-print(head(design))
-
-print("*** Estimated counts ***", quote = FALSE)
-print(head(counts))
 
 # Checking for a 1-1 correspondence between the rownames of the design file and the column names
 # of the estimated counts file.
@@ -82,35 +76,24 @@ for (i in 1:length(rownames(design)==colnames(counts))){
 print("*** Summary of the estimated counts file ***", quote = FALSE)
 print(summary(counts))
 
+# Print the head of counts matrix and design files to the terminal
+print("*** Design file ***", quote = FALSE)
+print(head(design))
+
+print("*** Estimated counts ***", quote = FALSE)
+print(head(counts))
+
 # Save a copy of the design file in the results folder
 
+file2_design_copy = file.path(parent_folder, "results", paste0(experiment, "_design.txt"))
 write.table(design,
-            file = file.path(parent_folder, "results", paste0(experiment, "_design.txt")),
+            file = file2_design_copy,
             sep = "\t")
 
-# 
-# This creates a latex document that is convertible into a pdf by writing in the command line the following:
-# pdflatex myfile.tex
-# and it will create a myfile.pdf
-# library('rmarkdown')
-# rmarkdown::render(input = "~/Documents/senior_project/automated_pca/scripts/step_01.R",
-#                   output_format = "pdf_document",
-#                   output_file = "~/Documents/senior_project/automated_pca/report/deleteme.pdf",
-                  # output_dir = NULL,
-                  # output_options = NULL,
-                  # output_yaml = NULL,
-                  # intermediates_dir = NULL,
-                  # knit_root_dir = NULL,
-                  # runtime = c("auto", "static", "shiny", "shiny_prerendered"),
-                  # clean = TRUE,
-                  # params = NULL,
-                  # knit_meta = NULL,
-                  # envir = parent.frame(),
-                  # run_pandoc = TRUE,
-                  # quiet = FALSE,
-                  # encoding = "UTF-8"
-#                   )
+# Save the path to the design file into a new copy of the JSON file (this will be used in the report generation)
 
-
-
+json_modified = json
+path_json_modified = file.path(parent_folder, "results", "pipeline_input_file_copy.json")
+json_modified$"path_2_results"$"design_file" = list(file2_design_copy)
+write_json(json_modified, path_json_modified)
 

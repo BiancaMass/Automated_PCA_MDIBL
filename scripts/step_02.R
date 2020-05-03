@@ -54,7 +54,7 @@ if (sum(counts != apply(counts, 2, as.integer)) > 0) { print("Error: not all num
 counts_mean = apply(counts, 1, mean, na.rm = TRUE)
 counts_stdev = apply(counts, 1, sd, na.rm = TRUE)
 
-#plot(counts_mean, counts_stdev)
+# plot(counts_mean, counts_stdev)
 
 # Save the matrix of gene means
 output_mean = file.path(parent_folder, "results", paste0(experiment, "_genecounts_means.txt"))
@@ -62,6 +62,7 @@ write.table(counts_mean, file = output_mean, sep = '\t')
 # Save the matrix of gene standard deviations
 output_sd = file.path(parent_folder, "results", paste0(experiment, "_genecounts_sd.txt"))
 write.table(counts_stdev, file = output_sd, sep = '\t')
+
 
 # Construct the DeSeq data set to apply rlog()
 print("*** Constructing the DESeq Data set ***")
@@ -73,14 +74,35 @@ for (i in 1:(length(json$design_formula))){
     nam <- paste0("formula", i)
     print(nam)
     assign(nam, json$design_formula[[i]])
+    last_number = i
   }
 }
+
+  if(last_number == 1){
+    design_formula <- as.formula( paste( "~", as.name(formula1)) ) 
+  } else if(last_number == 2){
+    design_formula <- as.formula( paste( "~", as.name(formula1),"+", as.name(formula2) ) )
+  } else {
+    print("error in creating the design formula.
+          Go back to the JSON file anch chek that under design formula
+          min. 1 and max. 2 terms are defined")
+  }
+
 
 ## Construct the DeSeq data set using the countdata (countmatrix) and coldata (sample information)
 dds <- DESeqDataSetFromMatrix(countData = counts,
                               colData = design,
-                              design = ~ treatment
+                              design = design_formula
 )
+
+
+# Saving the paths to the report_json file (for the automated report generation)
+path_2_json_copy = file.path(parent_folder, "results", "pipeline_input_file_copy.json")
+json_output <- read_json(path_2_json_copy)
+#json_output = as.list(json_output)
+json_output$path_2_results$"genecounts_means" = list(output_mean)
+json_output$path_2_results$"genecounts_sd" = list(output_sd)
+
 
 print("*** Normalizing the expression matrix using rlog or vst***")
 print("*** This will take a few moments ***")
@@ -93,10 +115,14 @@ if (ncol(assay(dds)) <=30) {
   rld_assay <- assay(rld)
   output_matrix = file.path(parent_folder, "results", paste0(experiment,"_rld_normalized.txt"))
   write.table(rld_assay, file = output_matrix, sep = '\t')
+  json_output$path_2_results$"normalized_rld" = list(output_matrix)
 } else {
    vsd <- vst(dds, blind = FALSE)
    vsd_assay <- assay(vsd)
    output_matrix = file.path(parent_folder, "results", paste0(experiment,"_vst_normalized.txt"))
    write.table(vsd_assay, file = output_matrix, sep = '\t')
+   json_output$path_2_results$"normalized_vsd" = list(output_matrix)
 }
+
+write_json(json_output, path_2_json_copy)
 
