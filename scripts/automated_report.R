@@ -1,6 +1,10 @@
 # A script that automatically generates a report of the pipeline
 
-# Hard-coded to test
+args = base::commandArgs(trailingOnly = TRUE)
+print(args)
+path2_json_file = args[1]
+
+# Hard coded to test
 path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
 
 library(knitr)
@@ -18,7 +22,9 @@ output_name = paste0(experiment, "_results")
 rmarkdown::render(report_file,
                   output_format = "html_document",
                   output_file = output_name,
-                  output_dir = output_directory)
+                  output_dir = output_directory,
+                  params = list(
+                    json = path2_json_file))
 
 
 # knit(report_file,

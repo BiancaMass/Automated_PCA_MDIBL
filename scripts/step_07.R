@@ -9,7 +9,7 @@ path2_json_file = args[1]
 
 # **********************************************************************
 # Hard coded to test
-# path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
+path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
 
 ## Load in the necessary libraries:
 options(stringsAsFactors = FALSE) 
@@ -23,6 +23,8 @@ parent_folder = json$"folders"$"parent_folder"
 experiment = json$"input_files"$"experiment_name"
 path2_design = file.path(parent_folder, "results", paste0(experiment, "_design_meaningful.txt"))
 path_2_pca = file.path(parent_folder, "results", paste0(experiment, "_pca_object.rds"))
+path_2_json_copy = file.path(parent_folder, "results", "pipeline_input_file_copy.json")
+json_copy = read_json(path_2_json_copy)
 
 # Load files
 design = read.table(path2_design, sep = "\t", header = TRUE, row.names = 1)
@@ -40,7 +42,10 @@ results = data.frame(pc_num  = rep(1:number_PC),
                      pv  = rep(0, number_PC))
 
 # hard coded
-pca_variable_from_design = "treatment"
+# Ask Dan how to do this (with one or multiple variables)
+# NB the single variables are inputs from the JSON
+
+pca_variable_from_design = ~site + treatment
 variable_pca = design[, pca_variable_from_design]
 categorical_variable = as.numeric(as.factor(variable_pca))
 

@@ -11,7 +11,7 @@ path2_json_file = args[1]
 # path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
 
 # Load the necessary libraries
-print("Loading libraries: jsonlite")
+print("Loading libraries")
 options(stringsAsFactors = FALSE)
 library(jsonlite)
 
@@ -30,6 +30,8 @@ print("Path to design and est.counts:")
 print(path2_design)
 print(path2_counts)
 
+print("*** Checking that matrix and design file exist and are not empty ***")
+
 # Check that the matrix and design files exist:
 inputs = c(path2_counts, path2_design)
 for (i in 1:length(inputs)){
@@ -39,7 +41,6 @@ for (i in 1:length(inputs)){
     stop()
   }
 }
-
 # Checking tha the matrix and design files are not empty:
 for (i in 1:length(inputs)){
   info = file.info(inputs[i])
@@ -53,12 +54,13 @@ print("*** Reading the design and estimated counts files ***")
 design = read.table(path2_design, header = TRUE, sep = "\t", row.names = 1)
 counts = read.table(path2_counts, header = TRUE, sep = "\t", row.names = 1)
 
+print("Checking that the est. counts matrix has no NAs")
 ##Check that the matrix has no NAs. If there are, print a warning message:
 if(sum(is.na(counts)) > 0){
   print('--- Warning: there are NAs in the count matrix')
 }
 
-
+print("*** Checking for a 1-1 correspondence between sample names in the two files ***")
 # Checking for a 1-1 correspondence between the rownames of the design file and the column names
 # of the estimated counts file.
 # If there is no correspondence, it prints the names that do not match, and stops the program
@@ -73,6 +75,9 @@ for (i in 1:length(rownames(design)==colnames(counts))){
   }
 }
 
+print("*** Estimated counts ***", quote = FALSE)
+print(head(counts))
+
 print("*** Summary of the estimated counts file ***", quote = FALSE)
 print(summary(counts))
 
@@ -80,11 +85,8 @@ print(summary(counts))
 print("*** Design file ***", quote = FALSE)
 print(head(design))
 
-print("*** Estimated counts ***", quote = FALSE)
-print(head(counts))
 
 # Save a copy of the design file in the results folder
-
 file2_design_copy = file.path(parent_folder, "results", paste0(experiment, "_design.txt"))
 write.table(design,
             file = file2_design_copy,
@@ -92,8 +94,8 @@ write.table(design,
 
 # Save the path to the design file into a new copy of the JSON file (this will be used in the report generation)
 
-json_modified = json
-path_json_modified = file.path(parent_folder, "results", "pipeline_input_file_copy.json")
-json_modified$"path_2_results"$"design_file" = file2_design_copy
-write_json(json_modified, path_json_modified)
+json_copy = json
+path_json_copy = file.path(parent_folder, "results", paste0(experiment, "_json_copy.json"))
+json_copy$path_2_results$design_file = file2_design_copy
+write_json(json_copy, path_json_copy, auto_unbox = TRUE)
 

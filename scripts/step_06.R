@@ -1,6 +1,6 @@
-## A script that performs linear regression on Eigenvalues vs component number
-## for 1->N, 2->N, until (N-2)->N and finds the meaningful PCs by setting
-## a cutoff for slope change = 0.5
+## A script that performs linear regression on log10 value of % Eigenvalues vs component number
+## for 1->N, 2->N, until (N-2)->N and finds the meaningful PCs with a maximum threshold on the
+## R-squared value for reach regression. N max = variable in JSON. Default = 10.
 ## It adds the coordinate of individual observations for each sample on each meaningful
 ## PC to the design file as new columns (PC1, PC2...PCN where N = last meaningful PC)
 
@@ -13,7 +13,8 @@ path2_json_file = args[1]
 # path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
 
 ## Load in the necessary libraries:
-options(stringsAsFactors = FALSE) 
+options(stringsAsFactors = FALSE)
+options(bitmapType='cairo')
 library(pcaMethods)
 library(Gviz)
 library(forestmangr)
@@ -23,7 +24,7 @@ library(dplyr)
 library(factoextra)
 library(readr)
 library(latticeExtra)
-#library(broom)
+library(ggplot2)
 
 # Read in input files:
 # JSON input file with SD and AVG thresholds
@@ -35,6 +36,22 @@ path2_design = file.path(parent_folder, "results", paste0(experiment, "_design.t
 path_2_eigenvalues = file.path(parent_folder, "results", paste0(experiment, "_pca_eigenvalues.txt"))
 path_2_pca = file.path(parent_folder, "results", paste0(experiment, "_pca_object.rds"))
 
+# Extract the R-squared value from the JSON. Default R-squared threshold = 0.95.
+if (!is.numeric(json$input_variables$R_squared_threshold)){
+  max_Rsqured = 0.95
+} else if (json$input_variables$R_squared_threshold > 1){
+  max_Rsqured = 0.95
+} else if (json$input_variables$R_squared_threshold <= 0){
+  max_Rsqured = 0.95
+} else {max_Rsqured = json$input_variables$R_squared_threshold}
+
+# Extract the max number of PC for regression. Default = 10.
+if (!is.numeric(json$input_variables$max_number_PC_regression)){
+  max_PC_regression = 10
+} else if(json$input_variables$max_number_PC_regression<1){
+  max_PC_regression = 10
+} else {max_PC_regression = json$input_variables$max_number_PC_regression}
+
 # Load files
 design = read.table(path2_design, sep = "\t", header = TRUE, row.names = 1)
 pca_eigenvalue = read.table(path_2_eigenvalues, sep = "\t", header = TRUE, row.names = 1)
@@ -42,15 +59,13 @@ pca = read_rds(path_2_pca)
 
 # **************** Start of the program **********************
 
-#par(mfrow = c(1,1))
+options(scipen = 999) #to avoid display in scientific notation
+
 # Visualize percent variation and decide which PCs matter
 pca_eigenvalue$dimension = 1:nrow(pca_eigenvalue)
-options(scipen = 999) #to avoid display in scientific notation
 pca_variation = round(pca_eigenvalue$variance.percent, 3)
 # convert to log10
 pca_var_log = log10(pca_variation)
-plot(pca_variation)
-plot(pca_var_log)
 
 # Create an empty table to save coefficients
 number_PC = nrow(pca_eigenvalue)
@@ -60,16 +75,12 @@ res = data.frame(model_num  = rep(0, number_PC-3),
                  R_squared = rep(0, number_PC-3),
                  adj_R_squared = rep(0, number_PC-3))
 
-### Find meaningful components ###
-
-# Performing linear regression on the log10 of the % Eigenvalues vs component number for 1->N, 2->N, until (N-3)->N
-# Note: there is so substantial difference in doing it on raw Eigenvaues vs %, but percentage is easier to read.
-# Warning: doing up to (N-3)->N or up to 10 PCs
-
-# add a threshold for max 10 PCs (as a variable in the JSON)
-# to the table add R^2 and a normalized R^2 (divided by number_PC-N)
-
+# Performing linear regression to find meaningful components
+# Warning: doing up to (N-2)->N or up to JSON parameter for mac PC number (default = 10)
 for (i in 1:(number_PC-3)){
+  if (i>max_PC_regression){
+    break
+  }
   linear = lm(pca_var_log[i:(number_PC-2)] ~ pca_eigenvalue$dimension[i:(number_PC-2)])
   res$model_num[i] = i
   res$intercept[i] = coef(linear)[1]
@@ -77,35 +88,17 @@ for (i in 1:(number_PC-3)){
   res$R_squared[i] = summary(linear)$r.squared
   res$adj_R_squared[i] = summary(linear)$adj.r.squared
 }
-# visualize the correlations:
-colfunc <- colorRampPalette(c("blue4",
-                              "deepskyblue",
-                              "darkolivegreen1",
-                              "darkgreen",
-                              "red"))
-colors = colfunc(nrow(res))
-plot(pca_var_log)
+
+# Find the significant PCs according to a max R_squared threshold
+
+# Establish the cutoff line and save that line as last_meaningful:
+
 for (i in 1:(nrow(res))){
-  abline(a = res$intercept[i], b = res$slope[i], col = colors[i])
-  text(x=number_PC-2, y=(i * 0.1)+0.6, labels=paste0("model # ", i, "->", "N-3"), col = colors[i])
-}
-
-
-#to gt the p.value (which I do not think I will need)
-#glance(linear)$p.value
-
-# Find the significant PCs
-# I am arbitrarily deciding to set a slope change greater than 50% as a cutoff
-
-for (i in 1:(nrow(res)-1)){
-  percent_change = (abs((res$slope[i]-res$slope[i+1])))/abs(res$slope[i])
-  #Stop the loop when the percent change in slope is more than 50%
-  if (percent_change > 0.5){
-    break
+  if (res$adj_R_squared[i] > max_Rsqured){
+    break()
   }
+  last_meaningful = i
 }
-# Take the last iteration through the loop to set the cut off point for meaningful PCs.
-last_meaningful = i
 
 # add the meaningful components values to the design file:
 
@@ -119,21 +112,54 @@ for (i in 1:last_meaningful){
 }
 
 # Save the copy of the design file that includes all “meaningful” component values as new columns:
-
 output_design_meaningful = file.path(parent_folder, "results", paste0(experiment, "_design_meaningful.txt"))
 write.table(design_meaningful_PC, file = output_design_meaningful, sep = '\t')
 
 
+# Plots for the final report:
+
+pca_var_log = as.data.frame(pca_var_log)
+pca_var_log$dimensions = 1:nrow(pca_var_log)
+
+figure9 = file.path(parent_folder, "figures", paste0(experiment, "_log10scree_plot.png"))
+png(figure9)
+ggplot()+
+  geom_point(aes(x = pca_var_log$dimensions, y = pca_var_log$pca_var_log))+
+  xlab("PC number")+
+  ylab("Eigenvalue log10")+
+  scale_x_continuous(breaks=c(1:nrow(pca_var_log)))+
+  ggtitle("Log 10 of the Eigenvalues vs PC number")
+dev.off()
+
+# create a color palette
+colfunc <- colorRampPalette(c("blue",
+                              "violet",
+                              "red",
+                              "orange",
+                              "yellow",
+                              "green",
+                              "brown",
+                              "black"))
+
+figure10 = file.path(parent_folder, "figures", paste0(experiment, "_regression_plot.png"))
+png(figure10)
+colors = colfunc(nrow(res))
+plot(pca_var_log$dimensions, pca_var_log$pca_var_log,
+     xlab = "PC number", ylab = "Eigenvalue log10",
+     main = "log10 of eigenvalues with the regression lines")
+for (i in 1:(nrow(res))){
+  abline(a = res$intercept[i], b = res$slope[i], col = colors[i])
+  text(x=number_PC-2, y=(i * 0.1)+0.6, labels=paste0("model # ", i, "->", "N-3"), col = colors[i])
+}
+dev.off()
 
 
-# Outputs:
-
-# A design file with the meaningful PCs.
-
-
-
-
-
-
+# Updating the json copy
+path_2_json_copy = file.path(parent_folder, "results", paste0(experiment, "_json_copy.json"))
+json_copy <- read_json(path_2_json_copy)
+json_copy$path_2_results$design_meaningful = as.character(output_design_meaningful)
+json_copy$figures$scree_plot_log10 = as.character(figure9)
+json_copy$figures$regression_plot = as.character(figure10)
+write_json(json_copy, path_2_json_copy, auto_unbox = TRUE)
 
 

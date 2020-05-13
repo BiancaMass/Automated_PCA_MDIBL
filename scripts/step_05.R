@@ -10,7 +10,8 @@ path2_json_file = args[1]
 # path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
 
 ## Load in the necessary libraries:
-options(stringsAsFactors = FALSE) 
+options(stringsAsFactors = FALSE)
+options(bitmapType='cairo')
 library(pcaMethods)
 library(Gviz)
 library(forestmangr)
@@ -56,42 +57,9 @@ if (mean(stdev) != 1){
 print("***Performing PCA. This can take a while.***")
 cols = ncol(filt_count)
 pca = prcomp(t(filt_count), scale = TRUE)
-# par(mfrow=c(1,2))
-# plot(pca$x[,1], pca$x[,2])
-# plot(pca$x[,2], pca$x[,3])
-# Scree plot generation:
+# for scree plot generation:
 pcavar <- pca$sdev^2
-pca.var.per <- round(pcavar/sum(pcavar)*100,1)
-# with log scale:
-#pca.var.per <- log(round(pcavar/sum(pcavar)*100,1))
-barplot(pca.var.per, main = 'Scree Plot', xlab= "Principal Component #",
-        ylab = "Percent Variation", ylim = c(0.001,100))
-# fviz_eig(pca) # another way to visualize percentage contribution
-
-### Ggplot plot for the report ###
-# Format the data the way ggplot2 likes it:
-# numbers are hard coded
-pca.data <- data.frame(Sample = rownames(pca$x),
-                       PC1 = pca$x[,1],
-                       PC2 = pca$x[,2],
-                       PC3 = pca$x[,3],
-                       PC4 = pca$x[,4],
-                       PC5 = pca$x[,5],
-                       PC6 = pca$x[,6],
-                       PC7 = pca$x[,7],
-                       PC8 = pca$x[,8],
-                       PC9 = pca$x[,9]
-                       )
-
-design$Sample = row.names(design)
-pca.data = dplyr::left_join(pca.data, design, by = "Sample")
-ggplot(data = pca.data, aes(x = PC1, y = PC2, label = site,
-                            color = treatment)) +
-  geom_text() +
-  xlab(paste("PC1: ", pca.var.per[1], "%", sep = ""))+
-  ylab(paste("PC2: ", pca.var.per[2], "%", sep = ""))+
-  theme_bw() +
-  ggtitle(paste("PC1 vs PC2", "| Experiment: ", experiment))
+per.pcavar = round(pcavar/sum(pcavar)*100,1)
 
 ### Generate a loading scores table ##
 loadings = pca$rotation
@@ -99,6 +67,105 @@ loadings = pca$rotation
 ### Save the loadings for each PC into a file ###
 output_loadings = file.path(parent_folder, "results", paste0(experiment, "_pca_loading_scores.txt"))
 write.table(loadings, file = output_loadings, sep = '\t')
+
+# Save the eigenvalues
+pca_eigenvalue=get_eig(pca)
+output_eigenvalues = file.path(parent_folder, "results", paste0(experiment, "_pca_eigenvalues.txt"))
+write.table(pca_eigenvalue, file = output_eigenvalues, sep = '\t')
+
+# Save the pca object
+output_pca = file.path(parent_folder, "results", paste0(experiment, "_pca_object.rds"))
+write_rds(pca, output_pca)
+
+
+
+# Figures for the report
+
+figure6 = file.path(parent_folder, "figures", paste0(experiment, "scree_plot.png"))
+png(figure6)
+fviz_eig(pca) # another way to visualize percentage contribution
+dev.off()
+
+# figure of PC1 vs PC2
+# Format the data the way ggplot2 likes it:
+pca_data <- matrix(ncol= ncol(pca$x)+1, nrow = nrow(pca$x))
+pca_data[,1] = rownames(pca$x)
+for (columns in 1:ncol(pca$x)){
+  pca_data[,columns+1] = pca$x[,columns]
+}
+
+pca_data = as.data.frame(pca_data)
+names(pca_data)[1] = "Sample"
+for (col_names in 2:ncol(pca_data)){
+  names(pca_data)[col_names] = paste0("PC", col_names-1)
+}
+
+design$Sample = row.names(design)
+pca_data = dplyr::left_join(pca_data, design, by = "Sample")
+
+figure7 = file.path(parent_folder, "figures", paste0(experiment, "PC1_PC2.png"))
+png(figure7)
+ggplot(data = pca_data, aes(x = PC1, y = PC2, label = site,
+                            color = treatment)) +
+  geom_text() +
+  xlab(paste("PC1: ", per.pcavar[1], "%", sep = ""))+
+  ylab(paste("PC2: ", per.pcavar[2], "%", sep = ""))+
+  theme_bw() +
+  ggtitle(paste("PC1 vs PC2", "| Experiment: ", experiment))+
+  theme(axis.text.x=element_blank(),
+        axis.text.y=element_blank())
+dev.off()
+
+figure8 = file.path(parent_folder, "figures", paste0(experiment, "PC2_PC3.png"))
+png(figure8)
+ggplot(data = pca_data, aes(x = PC2, y = PC3, label = site,
+                            color = treatment)) +
+  geom_text() +
+  xlab(paste("PC2: ", per.pcavar[2], "%", sep = ""))+
+  ylab(paste("PC3: ", per.pcavar[3], "%", sep = ""))+
+  theme_bw() +
+  ggtitle(paste("PC2 vs PC3", "| Experiment: ", experiment))+
+  theme(axis.text.x=element_blank(),
+        axis.text.y=element_blank())
+dev.off()
+
+
+
+# Updating the json copy
+path_2_json_copy = file.path(parent_folder, "results", paste0(experiment, "_json_copy.json"))
+json_copy <- read_json(path_2_json_copy)
+json_copy$path_2_results$all_loading_scores = as.character(output_loadings)
+json_copy$path_2_results$eigenvalues = as.character(output_eigenvalues)
+json_copy$path_2_results$pca_object = as.character(output_pca)
+json_copy$figures$scree_plot = as.character(figure6)
+json_copy$figures$PC1_PC2 = as.character(figure7)
+json_copy$figures$PC2_PC3 = as.character(figure8)
+write_json(json_copy, path_2_json_copy, auto_unbox = TRUE)
+
+
+
+# with log scale:
+# log.pca.var.per <- log(round(pcavar/sum(pcavar)*100,1))
+# barplot(log.pca.var.per, main = 'Scree Plot', xlab= "Principal Component #",
+#         ylab = "Percent Variation", ylim = c(0.001,5))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #Reminder: loading scores are the proportion of how much each gene contributes
 # to each pricipal component (where samples are plotted in the PCA plot).
@@ -111,18 +178,7 @@ write.table(loadings, file = output_loadings, sep = '\t')
 # direction of that component):
 
 # For PC1:
-gene.scores = abs(loadings[,1])
-gene.scores.ranked = sort(gene.scores, decreasing = TRUE)
-top_20_genes = names(gene.scores.ranked[1:20])
-pca$rotation[top_20_genes,1]
-
-# Save the eigenvalues
-pca_eigenvalue=get_eig(pca)
-output_eigenvalues = file.path(parent_folder, "results", paste0(experiment, "_pca_eigenvalues.txt"))
-write.table(pca_eigenvalue, file = output_eigenvalues, sep = '\t')
-
-# Save the pca object
-output_pca = file.path(parent_folder, "results", paste0(experiment, "_pca_object.rds"))
-write_rds(pca, output_pca)
-
-
+# gene.scores = abs(loadings[,1])
+# gene.scores.ranked = sort(gene.scores, decreasing = TRUE)
+# top_20_genes = names(gene.scores.ranked[1:20])
+# pca$rotation[top_20_genes,1]
