@@ -32,6 +32,7 @@ Example:
 - Design matrix
   - Text file, tab separated
   - First column: "sample" . Containes sample names *that need to be exactly the same as column names 2:N of the matrix files*
+    Note: if this is not the case, the program will throw an error and stop.
   - The other columns contain information about each sample
   
  Example:
@@ -46,6 +47,10 @@ Example:
  |sample7 | control   |kidney|F    |
  |sample8 | control   |kidney|M    |
 
+- JSON file
+  - Contains the variables and file paths needed to run the pipeline
+  - Template found in the /data directory of this repository
+  - For information on how to modify the JSON to run your analysis, go to *Operating instructions*
 
 
 ## 1. Requirements
