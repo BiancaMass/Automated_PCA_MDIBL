@@ -21,8 +21,6 @@ In order to run:
 1. Create a folder (parent folder), containing the following subfolders:
 - scripts
 - data
-- results
-- report
 
 2. Save your data (estimated count matrices and design files) in the data folder, together with the json input file.
 
