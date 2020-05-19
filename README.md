@@ -53,7 +53,7 @@ Example:
   - Template found in the /data directory of this repository
   - It should be structured as follows:
   
-  
+``` 
 {
   "input_files": {
     "infile1":"/home/mbianca/Documents/senior_project/automated_pca/data/vyin_007.design.txt",
@@ -83,7 +83,7 @@ Example:
     }
     
 }
-
+```
 
 
 
