@@ -56,13 +56,13 @@ Example:
 ``` 
 {
   "input_files": {
-    "infile1":"/home/mbianca/Documents/senior_project/automated_pca/data/vyin_007.design.txt",
-    "infile2":"/home/mbianca/Documents/senior_project/automated_pca/data/vyin_007.estCounts.txt",
-    "experiment_name": "vyin_007"
+    "infile1":"/path/to/design/file.txt",
+    "infile2":"/path/to/count_matrix/file.txt",
+    "experiment_name": "name_of_my_experiment"
   },
   
   "folders":{
-    "parent_folder":"/home/mbianca/Documents/senior_project/automated_pca"
+    "parent_folder":"path_to_parent_folder"
   },
   
   "input_variables":{
@@ -75,10 +75,9 @@ Example:
     
   },
   
-    
     "design_formula":{
             "design1":"treatment",
-            "design2":""
+            "design2":"site"
             
     }
     
