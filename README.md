@@ -11,7 +11,6 @@ This repository contains a pipeline that identifies unexpected variables in an e
 7. Contact information
 8. Known bugs
 9. Credits and acknowledgements
-10. Changelog
 
 
 ## 1. Input files
@@ -143,16 +142,23 @@ To run the pipeline, do the following:
 
 Note: the formula is used in the function DESeq2::DESeqDataSetFromMatrix(). Refer to the [documentation](https://www.rdocumentation.org/packages/DESeq2/versions/1.12.3/topics/DESeqDataSet-class).
 
-# INSERT MORE DETAILS ON THE DESIGN FORMULA
+# *** Insert more details on the design formula ***
   
  6. In the terminal, cd to the parent_folder/scripts and run the following command:
  bash bash_automated_pca.sh
 
 ## 4. Outputs
 
+The outputs of the pipeline can be found in the following subdirectories:
+  - /results
+  - /figures
+  - /report
+
+# *** Instert output list ***
+
 ## 5. Provided files list
 ## 6. Copyright and licensing 
 ## 7. Contact information
 ## 8. Known bugs
 ## 9. Credits and acknowledgements
-## 10. Changelog
+
