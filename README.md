@@ -54,6 +54,23 @@ Example:
 
 
 ## 1. Requirements
+The pipeline is written in R scripts called from a bash script.
+R version 3.6.2 (2019-12-12)
+
+Attached packages:
+latticeExtra_0.6-29         lattice_0.20-40             readr_1.3.1                
+factoextra_1.0.6            dplyr_0.8.5                 Gviz_1.30.3                
+pcaMethods_1.78.0           ggplot2_3.3.0               SparkR_2.4.5               
+stringr_1.4.0               genefilter_1.68.0           DESeq2_1.26.0              
+SummarizedExperiment_1.16.1 DelayedArray_0.12.2         BiocParallel_1.20.1        
+matrixStats_0.56.0          Biobase_2.46.0              GenomicRanges_1.38.0       
+GenomeInfoDb_1.22.0         IRanges_2.20.2              S4Vectors_0.24.3           
+BiocGenerics_0.32.0         forestmangr_0.9.1           jsonlite_1.6.1   
+
+
+#### Libraries
+
+
 A repository containing the steps for an automated PCA pipeline on a gene estimated counts matrix. Runs on R scripts through bash. Takes JSON file as input.
 The pipeline runs on R script
 The pipeline was designed for estimated counts and takes as inputs an estimated counts matrix and the corresponding design matrix.
