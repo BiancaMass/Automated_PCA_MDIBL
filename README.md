@@ -3,15 +3,15 @@ This repository contains a pipeline that identifies unexpected variables in an e
 
 
 1. Input files
-1. System requirements
-2. Operating instructions
-3. Outputs
-4. Provided files list
-5. Copyright and licensing 
-6. Contact information
-7. Known bugs
-8. Credits and acknowledgements
-9. Changelog
+2. System requirements
+3. Operating instructions
+4. Outputs
+5. Provided files list
+6. Copyright and licensing 
+7. Contact information
+8. Known bugs
+9. Credits and acknowledgements
+10. Changelog
 
 
 ## 1. Input files
@@ -62,7 +62,7 @@ Example:
   },
   
   "folders":{
-    "parent_folder":"path_to_parent_folder"
+    "parent_folder":"path/to/parent/folder"
   },
   
   "input_variables":{
@@ -72,25 +72,19 @@ Example:
     "sd_precentage_threshold":0.25,
     "R_squared_threshold":0.95,
     "max_number_PC_regression":9
-    
   },
   
     "design_formula":{
             "design1":"treatment",
-            "design2":"site"
-            
-    }
-    
+            "design2":"site"     
+    }  
 }
 ```
 
+Refer to *Operating Instructions* to know which variables to change in order to run the pipeline.
 
 
-
-
-
-
-## 1. Requirements
+## 2. Requirements
 The pipeline is written in R scripts called from a bash script.
 R version 3.6.2 (2019-12-12)
 
@@ -121,7 +115,7 @@ R version 3.6.2 (2019-12-12)
 - jsonlite_1.6.1   
 - grDevices_3.6.2
 
-## 2. Operating instructions
+## 3. Operating instructions
 
 To run the pipeline, do the following:
 
@@ -139,14 +133,26 @@ To run the pipeline, do the following:
   - PARENT_DIR=~/path/2/your/parent/folder/
   - JSON_FILE_NAME=name_of_your_json.json
   
- 5. Change the variables in the json file to fit your file paths and desired parameters, as described in *Input Files*.
+ 5. Change the variables in the json file to fit your file paths and desired parameters as follows:
+  -  "infile1": path to your design file. e.g. "/home/bmass/projects/pipeline/data/experiment_12_design.txt"
+  -  "infile2": path to your design file. e.g. "/home/bmass/projects/pipeline/data/experiment_12_estcounts.txt"
+  -  "experiment_name": name of your experiment. This is used to name output files. e.g. "experiment_12"
+  -  "parent_folder": path to your parent folder e.g. "/home/bmass/projects/pipeline/"
+  -  "design1": the name of the column of the design file which will be your first element of the design formula e.g. "treatment"
+  -  "design2": the name of the column of the design file which will be your second element of the design formula e.g. "sex"
+
+Note: the formula is used in the function DESeq2::DESeqDataSetFromMatrix(). Refer to the [documentation](https://www.rdocumentation.org/packages/DESeq2/versions/1.12.3/topics/DESeqDataSet-class).
+
+# INSERT MORE DETAILS ON THE DESIGN FORMULA
   
  6. In the terminal, cd to the parent_folder/scripts and run the following command:
  bash bash_automated_pca.sh
- 
-## 3. Provided files list
-## 4. Copyright and licensing 
-## 5. Contact information
-## 6. Known bugs
-## 7. Credits and acknowledgements
-## 8. Changelog
+
+## 4. Outputs
+
+## 5. Provided files list
+## 6. Copyright and licensing 
+## 7. Contact information
+## 8. Known bugs
+## 9. Credits and acknowledgements
+## 10. Changelog
