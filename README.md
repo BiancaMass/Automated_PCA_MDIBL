@@ -29,9 +29,22 @@ Example:
 |ENSMUSG00000000078	| 0	| 0	| 0	| 0	| 0	| 0	| 0	| 0 |
 |ENSMUSG00000000085	| 44	| 8	| 64	| 59	| 18	| 32	| 37	| 7 |
 
-
-
-
+- Design matrix
+  - Text file, tab separated
+  - First column: "sample" . Containes sample names *that need to be exactly the same as column names 2:N of the matrix files*
+  - The other columns contain information about each sample
+  
+ Example:
+ | sample | treatment | site | sex |
+ |--------|-----------|------|-----|
+ |sample1 | drug      |liver |F    |
+ |sample2 | drug      |liver |M    |
+ |sample3 | drug      |kidney|F    |
+ |sample4 | drug      |kidney|M    |
+ |sample5 | control   |liver |F    |
+ |sample6 | control   |liver |M    |
+ |sample7 | control   |kidney|F    |
+ |sample8 | control   |kidney|M    |
 
 
 
