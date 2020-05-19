@@ -1,7 +1,9 @@
 # Automated_PCA_MDIBL
-A repository containing the steps for an automated PCA pipeline on a gene estimated counts matrix. Runs on R scripts through bash. Takes JSON file as input.
+This repository contains a pipeline that identifies unexpected variables in an expression data matrix. It performs normalization on the count matrix, PC Analysis, and regression on the PCs vs experimental design. Once unexpected variables are identified, their PC coordinates are captured into a modified design file, to be used for downstream analysis as surrogates of e unexpected variable(s).
 
-1. Requirements
+
+1. Input files
+1. System requirements
 2. Operating instructions
 3. Provided files list
 4. Copyright and licensing 
@@ -10,7 +12,34 @@ A repository containing the steps for an automated PCA pipeline on a gene estima
 7. Credits and acknowledgements
 8. Changelog
 
+
+## 1. Input files
+- Estimated counts matrix.
+  - Text file, tab separated.
+  - Gene IDs are in rows, samples are in columns
+  - First column is gene_id
+  - Column names 2:N are the sample names
+
+Example:
+
+| gene_id	| sample1	| sample2	| sample3	| sample4	| sample5	| sample6	| sample7	| sample8 |
+|---------|---------|---------|---------|---------|---------|---------|---------|---------|
+|ENSMUSG00000000001	| 2 | 3 |	4	| 7	| 3	| 5	| 1	| 3 |
+|ENSMUSG00000000037	| 10190 | 4432 | 2244 |	2797 | 2540	| 15565	| 4369	| 12606 |
+|ENSMUSG00000000078	| 0	| 0	| 0	| 0	| 0	| 0	| 0	| 0 |
+|ENSMUSG00000000085	| 44	| 8	| 64	| 59	| 18	| 32	| 37	| 7 |
+
+
+
+
+
+
+
 ## 1. Requirements
+A repository containing the steps for an automated PCA pipeline on a gene estimated counts matrix. Runs on R scripts through bash. Takes JSON file as input.
+The pipeline runs on R script
+The pipeline was designed for estimated counts and takes as inputs an estimated counts matrix and the corresponding design matrix.
+
 - Libraries
 - R version
 
