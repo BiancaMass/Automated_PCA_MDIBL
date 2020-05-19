@@ -18,6 +18,7 @@ library(DESeq2)
 library(genefilter)
 library(stringr)
 library(SparkR)
+library(ggplot2)
 
 # **********************************************************************
 
@@ -77,13 +78,20 @@ for (i in 1:(length(json$design_formula))){
     nam <- paste0("formula", i)
     assign(nam, json$design_formula[[i]])
     last_number = i
-  }else{
-    print("*** Error: the JSON does not contain a design formula and there is not default ***")
-    stop()
+  }else if (str_length(json$design_formula[[i]]) <= 0){
+    print(" ")
   }
+} 
+
+if (exists("formula1")){
+  print(paste("formula 1:", formula1))
+} else{
+  print("*** Error: the JSON does not contain a design formula and there is not default ***")
+  stop()
 }
 
-  if(last_number == 1){
+
+if(last_number == 1){
     design_formula <- as.formula( paste( "~", as.name(formula1)) ) 
   } else if(last_number == 2){
     design_formula <- as.formula( paste( "~", as.name(formula1),"+", as.name(formula2) ) )
@@ -104,8 +112,8 @@ dds <- DESeqDataSetFromMatrix(countData = counts,
 # Saving the paths to the report_json file (for the automated report generation)
 path_2_json_copy = file.path(parent_folder, "results", paste0(experiment, "_json_copy.json"))
 json_copy <- read_json(path_2_json_copy)
-json_copy$path_2_results$"genecounts_means" = output_mean
-json_copy$path_2_results$"genecounts_sd" = output_sd
+json_copy$path_2_results$genecounts_means = as.character(output_mean)
+json_copy$path_2_results$genecounts_sd = as.character(output_sd)
 
 
 print("*** Normalizing the expression matrix using rlog or vst***")
@@ -119,13 +127,13 @@ if (ncol(assay(dds)) <=30) {
   rld_assay <- assay(rld)
   output_matrix = file.path(parent_folder, "results", paste0(experiment,"_rld_normalized.txt"))
   write.table(rld_assay, file = output_matrix, sep = '\t')
-  json_copy$path_2_results$"normalized_rld" = as.character(output_matrix)
+  json_copy$path_2_results$normalized_rld = as.character(output_matrix)
 } else {
    vsd <- vst(dds, blind = FALSE)
    vsd_assay <- assay(vsd)
    output_matrix = file.path(parent_folder, "results", paste0(experiment,"_vst_normalized.txt"))
    write.table(vsd_assay, file = output_matrix, sep = '\t')
-   json_copy$path_2_results$"normalized_vst" = as.character(output_matrix)
+   json_copy$path_2_results$normalized_vst = as.character(output_matrix)
 }
 
 # Making a plot for the report:

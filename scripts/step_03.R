@@ -9,13 +9,14 @@ path2_json_file = args[1]
 
 # **********************************************************************
 # Hard coded to test
-# path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
+path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
 
 print("Loading libraries: genefilter, jsonlite")
 options(stringsAsFactors = FALSE)
 options(bitmapType='cairo')
 library(genefilter)
 library(jsonlite)
+library(ggplot2)
 
 # Load the necessary libraries
 print("*** Reading the input files ***")
@@ -59,9 +60,7 @@ write.table(Z, file = output_Z, sep = '\t')
 output_Z_ms = file.path(parent_folder, "results", paste0(experiment, "_Z_mean_stdev.txt"))
 write.table(Z_ms, file = output_Z_ms, sep = '\t')
 
-
 ## Generate plots for the report
-
 figure1 = file.path(parent_folder, "figures", paste0(experiment, "_rlog_vsd_mean_sd.png"))
 png(figure1)
 ggplot()+

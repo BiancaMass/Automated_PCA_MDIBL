@@ -55,9 +55,6 @@ sd_quantile <-   quantile(raw_sd[,1], probs = sd_thr)
 mean_subset <- subset(raw_means, raw_means[,1]>mean_quantile)
 sd_subset <- subset(raw_sd, raw_sd[,1] > sd_quantile)
 
-# nrow(raw_means) - nrow(mean_subset)
-# nrow(raw_sd) - nrow(sd_subset)
-
 # Subsetting the data set for a min average and variance in expression levels
 # The mean is the average gene expression
 # low mean means the gene is not highly expressed across samples

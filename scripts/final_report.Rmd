@@ -3,7 +3,7 @@ title: "Final Report"
 output: html_document
 Author: "Bianca Matilde Massacci"
 params:
-  json: "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
+  json: ""
 ---
 
 ```{r}
@@ -101,13 +101,13 @@ print(paste("gene counts standard deviations: ", path_2_counts_sd))
 The normalized matrix can be found at:
 
 ```{r}
-if (file.exists(json_copy$path_2_results$normalized_rld)){
+if (file.exists(as.character(json_copy$path_2_results$normalized_rld))){
   path2_matrix_norm_1 = json_copy$path_2_results$normalized_rld
   print(path2_matrix_norm_1)
   norm_1 = read.table(path2_matrix_norm_1, header = TRUE, sep = "\t", row.names = 1)
   kable(head(norm_1), caption = "The first six rows of the matrix after rld() normalization.")
   kable(summary(norm_1), caption = "Statistical summary of the rld() normalized matrix.")
-} else if (file.exists(json_copy$path_2_results$normalized_vst)) {
+} else if (file.exists(as.character(json_copy$path_2_results$normalized_vst))) {
   path2_matrix_norm_1 = json_copy$path_2_results$normalized_vst
   norm_1 = read.table(path2_matrix_norm_1, header = TRUE, sep = "\t", row.names = 1)
   kable(head(norm_1), caption = "The first six rows of the matrix after vsd() normalization.")

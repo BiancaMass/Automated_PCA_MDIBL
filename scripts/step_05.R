@@ -155,18 +155,6 @@ write_json(json_copy, path_2_json_copy, auto_unbox = TRUE)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 #Reminder: loading scores are the proportion of how much each gene contributes
 # to each pricipal component (where samples are plotted in the PCA plot).
 # A large positive loading score will push sample to the right.

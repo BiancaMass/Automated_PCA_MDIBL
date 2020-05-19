@@ -9,7 +9,7 @@ path2_json_file = args[1]
 
 # **********************************************************************
 # Hard coded to test
-path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
+# path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
 
 ## Load in the necessary libraries:
 options(stringsAsFactors = FALSE)
@@ -17,6 +17,7 @@ options(bitmapType='cairo')
 library(jsonlite)
 library(readr)
 library(ggplot2)
+library(stringr)
 
 # Read in input files:
 print("*** Reading the input files ***")
@@ -125,19 +126,23 @@ for (formula in 1:length(design_formulas)){
 ## Standards chosen: p-value = 0.5
 ## abs(slope) >= 0.3
 
-significant_results = data.frame(pc_num  = rep(NA, number_PC),
-                                 cor = rep(NA, number_PC),
-                                 pv  = rep(NA, number_PC))
+# significant_results = data.frame(pc_num  = rep(NA, number_PC),
+#                                  cor = rep(NA, number_PC),
+#                                  pv  = rep(NA, number_PC))
+# 
+# 
+# for (i in 1:nrow(results)){
+#   if((results$pv)[i] <= 0.06 & (abs((results$cor)[i]) >= 0.3)) {
+#     significant_results[i, ] = results[i, ]
+#   }
+# }
+# 
+# output_sig_res = file.path(parent_folder, "results", paste0(experiment, "_significant_PC_vs_designformula.txt"))
+# write.table(significant_results, file = output_sig_res, sep = '\t')
 
 
-for (i in 1:nrow(results)){
-  if((results$pv)[i] <= 0.06 & (abs((results$cor)[i]) >= 0.3)) {
-    significant_results[i, ] = results[i, ]
-  }
-}
-
-output_sig_res = file.path(parent_folder, "results", paste0(experiment, "_significant_PC_vs_designformula.txt"))
-write.table(significant_results, file = output_sig_res, sep = '\t')
+# save the updated json copy 
+write_json(json_copy, path_2_json_copy, auto_unbox = TRUE)
 
 #citation("pcaMethods")
 
