@@ -5,12 +5,13 @@ This repository contains a pipeline that identifies unexpected variables in an e
 1. Input files
 1. System requirements
 2. Operating instructions
-3. Provided files list
-4. Copyright and licensing 
-5. Contact information
-6. Known bugs
-7. Credits and acknowledgements
-8. Changelog
+3. Outputs
+4. Provided files list
+5. Copyright and licensing 
+6. Contact information
+7. Known bugs
+8. Credits and acknowledgements
+9. Changelog
 
 
 ## 1. Input files
@@ -50,14 +51,51 @@ Example:
 - JSON file
   - Contains the variables and file paths needed to run the pipeline
   - Template found in the /data directory of this repository
-  - For information on how to modify the JSON to run your analysis, go to *Operating instructions*
+  - It should be structured as follows:
+  
+  
+{
+  "input_files": {
+    "infile1":"/home/mbianca/Documents/senior_project/automated_pca/data/vyin_007.design.txt",
+    "infile2":"/home/mbianca/Documents/senior_project/automated_pca/data/vyin_007.estCounts.txt",
+    "experiment_name": "vyin_007"
+  },
+  
+  "folders":{
+    "parent_folder":"/home/mbianca/Documents/senior_project/automated_pca"
+  },
+  
+  "input_variables":{
+    "min_gene_tot_raw_count": 1,
+    "min_count_mean":0,
+    "mean_precentage_threshold":0.25,
+    "sd_precentage_threshold":0.25,
+    "R_squared_threshold":0.95,
+    "max_number_PC_regression":9
+    
+  },
+  
+    
+    "design_formula":{
+            "design1":"treatment",
+            "design2":""
+            
+    }
+    
+}
+
+
+
+
+
+
 
 
 ## 1. Requirements
 The pipeline is written in R scripts called from a bash script.
 R version 3.6.2 (2019-12-12)
 
-### Attached packages
+#### Attached packages
 - latticeExtra_0.6-29
 - lattice_0.20-40   
 - readr_1.3.1    
@@ -82,38 +120,27 @@ R version 3.6.2 (2019-12-12)
 - BiocGenerics_0.32.0  
 - forestmangr_0.9.1       
 - jsonlite_1.6.1   
-
-
-
-#### Libraries
-
-
-A repository containing the steps for an automated PCA pipeline on a gene estimated counts matrix. Runs on R scripts through bash. Takes JSON file as input.
-The pipeline runs on R script
-The pipeline was designed for estimated counts and takes as inputs an estimated counts matrix and the corresponding design matrix.
-
-- Libraries
-- R version
+- grDevices_3.6.2
 
 ## 2. Operating instructions
 
-In order to run:
+To run the pipeline, do the following:
 
-1. Create a folder (parent folder), containing the following subfolders:
+1. Create a folder on your machine (parent folder), containing the following subfolders:
 - scripts
 - data
 
-2. Save your data (estimated count matrices and design files) in the data folder, together with the json input file.
+2. Save your data (estimated count matrices and design files) in the data folder, together with the json input file (found in the /data folder of this GitHub repository).
 
-3. Save the scripts in the scripts folder
+3. Save the scripts from in the scripts folder (scripts are in the /scripts folder of this GitHub repository).
 
 4. Open the bash script "bash_automated_pca.sh"
 
 5. Change the following variables in the bash script:
-  - PARENT_DIR=~/path/2/your/parent/folder
+  - PARENT_DIR=~/path/2/your/parent/folder/
   - JSON_FILE_NAME=name_of_your_json.json
   
- 5. Change the variables in the json file to fit your file paths and desired parameters (see the README  inside the data folder).
+ 5. Change the variables in the json file to fit your file paths and desired parameters, as described in *Input Files*.
   
  6. In the terminal, cd to the parent_folder/scripts and run the following command:
  bash bash_automated_pca.sh
