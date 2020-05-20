@@ -1,6 +1,6 @@
 ## A script that performs linear regression on log10 value of % Eigenvalues vs component number
 ## for 1->N, 2->N, until (N-2)->N and finds the meaningful PCs with a maximum threshold on the
-## R-squared value for reach regression. N max = variable in JSON. Default = 10.
+## R-squared value for each regression. N max = variable in JSON. Default = 10.
 ## It adds the coordinate of individual observations for each sample on each meaningful
 ## PC to the design file as new columns (PC1, PC2...PCN where N = last meaningful PC)
 
@@ -94,7 +94,7 @@ for (i in 1:(number_PC-3)){
 # Establish the cutoff line and save that line as last_meaningful:
 
 for (i in 1:(nrow(res))){
-  if (res$adj_R_squared[i] > max_Rsqured){
+  if (res$R_squared[i] > max_Rsqured){
     break()
   }
   last_meaningful = i
@@ -153,11 +153,23 @@ for (i in 1:(nrow(res))){
 }
 dev.off()
 
+### Generate a loading scores table  only for meaningful PCs ##
+loadings_meaningful = pca$rotation[,1:last_meaningful]
+
+### Save the loadings for meaningful PC into a file ###
+output_loadings_meaningful = file.path(parent_folder, "results", paste0(experiment, "_meaningful_pc_loading_scores.txt"))
+write.table(loadings_meaningful, file = output_loadings_meaningful, sep = '\t')
+
+### Save the regression table
+output_pc_eigen = file.path(parent_folder, "results", paste0(experiment, "_regression_pc_eigen.txt"))
+write.table(res, file = output_pc_eigen, sep = '\t')
 
 # Updating the json copy
 path_2_json_copy = file.path(parent_folder, "results", paste0(experiment, "_json_copy.json"))
 json_copy <- read_json(path_2_json_copy)
 json_copy$path_2_results$design_meaningful = as.character(output_design_meaningful)
+json_copy$path_2_results$meaningful_loading_scores = as.character(output_loadings_meaningful)
+json_copy$path_2_results$pc_vs_eigen = as.character(output_pc_eigen)
 json_copy$figures$scree_plot_log10 = as.character(figure9)
 json_copy$figures$regression_plot = as.character(figure10)
 write_json(json_copy, path_2_json_copy, auto_unbox = TRUE)

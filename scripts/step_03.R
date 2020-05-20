@@ -11,7 +11,7 @@ path2_json_file = args[1]
 # Hard coded to test
 path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
 
-print("Loading libraries: genefilter, jsonlite")
+print("*** Loading libraries ***")
 options(stringsAsFactors = FALSE)
 options(bitmapType='cairo')
 library(genefilter)

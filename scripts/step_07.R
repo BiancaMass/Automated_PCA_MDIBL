@@ -46,9 +46,8 @@ design_formulas = c(rep(0, length(json$design_formula)))
 for (i in 1:(length(json$design_formula))){
   if (str_length(json$design_formula[[i]]) > 0){
     design_formulas[i] = json$design_formula[[i]]
-  }else{
-    print("*** Error: the JSON does not contain a design formula and there is not default ***")
-    stop()
+  }else if (str_length(json$design_formula[[i]]) <= 0){
+    design_formulas = design_formulas[-i]
   }
 }
 

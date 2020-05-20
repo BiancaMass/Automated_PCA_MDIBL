@@ -3,7 +3,7 @@ title: "Final Report"
 output: html_document
 Author: "Bianca Matilde Massacci"
 params:
-  json: ""
+  json: "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
 ---
 
 ```{r}
@@ -243,5 +243,35 @@ knitr::include_graphics(figure9)
 knitr::include_graphics(figure10)
 ```
 
+Results of the regression PC number vs log10 eigenvalues:
+
+```{r}
+path_2_pc_eigen = json_copy$path_2_results$pc_vs_eigen
+regression_pc_eigen = read.table(file.path(path_2_pc_eigen), header = TRUE, sep = "\t", row.names = 1)
+kable(regression_pc_eigen, caption = "Regression of PC number vs log10 eigenvalues")
+```
+
+```{r}
+R_squared_threshold = json_copy$input_variables$R_squared_threshold
+print(paste("R squared maximum threshold:", R_squared_threshold))
+```
+
+
 ### step_07.R
+
+```{r}
+for (i in 1:length(json_copy$figures$scree_plot_cor)){
+  figure_x = as.character(json_copy$figures$scree_plot_cor[i])
+  print(knitr::include_graphics(figure_x))
+}
+```
+
+
+```{r}
+for (i in length(json_copy$path_2_results$correlation_table)){
+  path_2_result_table = as.character(json_copy$path_2_results$correlation_table[i])
+  result_table = read.table(file.path(path_2_result_table), header = TRUE, sep = "\t", row.names = 1)
+  print(kable(result_table, caption = path_2_result_table))
+}
+```
 

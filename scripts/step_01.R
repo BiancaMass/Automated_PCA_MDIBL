@@ -11,7 +11,7 @@ path2_json_file = args[1]
 # path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
 
 # Load the necessary libraries
-print("Loading libraries")
+print("*** Loading libraries ***")
 options(stringsAsFactors = FALSE)
 library(jsonlite)
 

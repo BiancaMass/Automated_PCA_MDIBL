@@ -10,6 +10,7 @@ path2_json_file = args[1]
 # path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
 
 ## Load in the necessary libraries:
+print("*** Loading libraries ***")
 options(stringsAsFactors = FALSE)
 options(bitmapType='cairo')
 library(pcaMethods)
@@ -21,6 +22,7 @@ library(ggplot2)
 library(dplyr)
 library(factoextra)
 library(readr)
+library(stringr)
 
 #### Read in input files ###
 # JSON input file with SD and AVG thresholds
@@ -77,7 +79,16 @@ write.table(pca_eigenvalue, file = output_eigenvalues, sep = '\t')
 output_pca = file.path(parent_folder, "results", paste0(experiment, "_pca_object.rds"))
 write_rds(pca, output_pca)
 
-
+# Extract the design equation variables
+for (i in 1:(length(json$design_formula))){
+  if (str_length(json$design_formula[[i]]) > 0){
+    nam <- paste0("formula", i)
+    assign(nam, json$design_formula[[i]])
+    last_number = i
+  }else if (str_length(json$design_formula[[i]]) <= 0){
+    print(" ")
+  }
+} 
 
 # Figures for the report
 
@@ -103,32 +114,81 @@ for (col_names in 2:ncol(pca_data)){
 design$Sample = row.names(design)
 pca_data = dplyr::left_join(pca_data, design, by = "Sample")
 
-figure7 = file.path(parent_folder, "figures", paste0(experiment, "PC1_PC2.png"))
-png(figure7)
-ggplot(data = pca_data, aes(x = PC1, y = PC2, label = site,
-                            color = treatment)) +
-  geom_text() +
-  xlab(paste("PC1: ", per.pcavar[1], "%", sep = ""))+
-  ylab(paste("PC2: ", per.pcavar[2], "%", sep = ""))+
-  theme_bw() +
-  ggtitle(paste("PC1 vs PC2", "| Experiment: ", experiment))+
-  theme(axis.text.x=element_blank(),
-        axis.text.y=element_blank())
-dev.off()
+# If loop to make a PC plot depending on whether we have 1 or 2 design formulas:
 
-figure8 = file.path(parent_folder, "figures", paste0(experiment, "PC2_PC3.png"))
-png(figure8)
-ggplot(data = pca_data, aes(x = PC2, y = PC3, label = site,
-                            color = treatment)) +
-  geom_text() +
-  xlab(paste("PC2: ", per.pcavar[2], "%", sep = ""))+
-  ylab(paste("PC3: ", per.pcavar[3], "%", sep = ""))+
-  theme_bw() +
-  ggtitle(paste("PC2 vs PC3", "| Experiment: ", experiment))+
-  theme(axis.text.x=element_blank(),
-        axis.text.y=element_blank())
-dev.off()
+if (exists("formula2")){
+  figure7 = file.path(parent_folder, "figures", paste0(experiment, "PC1_PC2.png"))
+  png(figure7)
+  print(ggplot(data = pca_data, aes_string(x = "PC1", y = "PC2",
+                                     label = formula1,
+                                     color = formula2)) +
+    geom_text() +
+    xlab(paste("PC1: ", per.pcavar[1], "%", sep = ""))+
+    ylab(paste("PC2: ", per.pcavar[2], "%", sep = ""))+
+    theme_bw() +
+    ggtitle(paste("PC1 vs PC2", "| Experiment: ", experiment))+
+    theme(axis.text.x=element_blank(),
+          axis.text.y=element_blank()))
+  dev.off()
+} else if (!exists("formula2") & exists("formula1")){
+  figure7 = file.path(parent_folder, "figures", paste0(experiment, "PC1_PC2.png"))
+  png(figure7)
+  print(ggplot(data = pca_data, aes_string(x = "PC1", y = "PC2",
+                                     label = formula1,
+                                     color = formula1)) +
+    geom_text() +
+    xlab(paste("PC1: ", per.pcavar[1], "%", sep = ""))+
+    ylab(paste("PC2: ", per.pcavar[2], "%", sep = ""))+
+    theme_bw() +
+    ggtitle(paste("PC1 vs PC2", "| Experiment: ", experiment))+
+    theme(axis.text.x=element_blank(),
+          axis.text.y=element_blank()))
+  dev.off()
+} else if (!exists("formula2") & !exists("formula1")){
+  print("*** Error: Missing design formula. Please check the JSON input file ***")
+} else if (exists("formula2") & !exists("formula1")){
+  print("*** Error: please change the JSON file. If there is only one design variable, save it under design1 ***")
+} else {
+  print("*** Error: there is a problem with the design formula. Please check the JSON input file ***")
+}
 
+
+# Same loop, but for PC2 and PC3
+if (exists("formula2")){
+  figure8 = file.path(parent_folder, "figures", paste0(experiment, "PC2_PC3.png"))
+  png(figure8)
+  print(ggplot(data = pca_data, aes_string(x = "PC2", y = "PC3", label = formula1,
+                              color = formula2)) +
+    geom_text() +
+    xlab(paste("PC2: ", per.pcavar[2], "%", sep = ""))+
+    ylab(paste("PC3: ", per.pcavar[3], "%", sep = ""))+
+    theme_bw() +
+    ggtitle(paste("PC2 vs PC3", "| Experiment: ", experiment))+
+    theme(axis.text.x=element_blank(),
+          axis.text.y=element_blank()))
+  dev.off()
+  
+}else if (!exists("formula2") & exists("formula1")){
+  figure8 = file.path(parent_folder, "figures", paste0(experiment, "PC2_PC3.png"))
+  png(figure8)
+  print(ggplot(data = pca_data, aes_string(x = "PC2", y = "PC3", label = formula1,
+                              color = formula1)) +
+    geom_text() +
+    xlab(paste("PC2: ", per.pcavar[2], "%", sep = ""))+
+    ylab(paste("PC3: ", per.pcavar[3], "%", sep = ""))+
+    theme_bw() +
+    ggtitle(paste("PC2 vs PC3", "| Experiment: ", experiment))+
+    theme(axis.text.x=element_blank(),
+          axis.text.y=element_blank()))
+  dev.off()
+  
+} else if (!exists("formula2") & !exists("formula1")){
+  print("*** Error: Missing design formula. Please check the JSON input file ***")
+} else if (exists("formula2") & !exists("formula1")){
+  print("*** Error: please change the JSON file. If there is only one design variable, save it under design1 ***")
+} else {
+  print("*** Error: there is a problem with the design formula. Please check the JSON input file ***")
+}
 
 
 # Updating the json copy
