@@ -1,12 +1,12 @@
 {
   "input_files": {
-    "infile1":"/home/mbianca/Documents/senior_project/automated_pca/data/vyin_008.mouse_heart_msi1436_2017.all.design.txt",
-    "infile2":"/home/mbianca/Documents/senior_project/automated_pca/data/deleteme.vyin_008.mouse_heart_msi1436_2017.all.counts.txt",
-    "experiment_name": "008_may25"
+    "infile1":"/full/path/2/design_file.txt",
+    "infile2":"/full/path/2/counts_file.txt",
+    "experiment_name": "experiment_name"
   },
   
   "folders":{
-    "parent_folder":"/home/mbianca/Documents/senior_project/automated_pca"
+    "parent_folder":"/full/path/to/parent_folder"
   },
   
   "input_variables":{
@@ -20,13 +20,13 @@
   },
     
     "design_variables":{
-            "design1":"site",
-            "design2":"treatment"
+            "design1":"variable1",
+            "design2":"variable2"
             
     },
     
      "design_formula":{
-            "design":"site~treatment"
+            "design":"design ~ formula"
             
     }
     
