@@ -15,10 +15,10 @@ This repository contains a pipeline that identifies unexpected variables in an e
 
 ## 1. Input files
 - Estimated counts matrix.
-  - Text file, tab separated.
+  - Text file, tab ("\t") separated.
   - Gene IDs are in rows, samples are in columns
-  - First column is gene_id
-  - Column names 2:N are the sample names
+  - First column contains the row names (gene_ids)
+  - First row contains the column headers (gene_id and then sample names)
 
 Example:
 
@@ -30,8 +30,9 @@ Example:
 |ENSMUSG00000000085	| 44	| 8	| 64	| 59	| 18	| 32	| 37	| 7 |
 
 - Design matrix
-  - Text file, tab separated
-  - First column: "sample" . Containes sample names *that need to be exactly the same as column names 2:N of the matrix files*
+  - Text file, tab ("\t") separated
+  - The first row contains column headers
+  - First column contains the sample names *that need to be exactly the same as column names 2:N of the count matrix*
     Note: if this is not the case, the program will throw an error and stop.
   - The other columns contain information about each sample
   
