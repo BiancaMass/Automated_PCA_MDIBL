@@ -75,25 +75,26 @@ for (i in 1:length(rownames(design)==colnames(counts))){
   }
 }
 
-print("*** Estimated counts ***", quote = FALSE)
+print("*** Head of the estimated counts ***", quote = FALSE)
 print(head(counts))
 
 print("*** Summary of the estimated counts file ***", quote = FALSE)
 print(summary(counts))
 
 # Print the head of counts matrix and design files to the terminal
-print("*** Design file ***", quote = FALSE)
+print("*** Head of the design file ***", quote = FALSE)
 print(head(design))
 
 
 # Save a copy of the design file in the results folder
+print("*** Creating a copy of the design file ***")
 file2_design_copy = file.path(parent_folder, "results", paste0(experiment, "_design.txt"))
 write.table(design,
             file = file2_design_copy,
             sep = "\t")
 
 # Save the path to the design file into a new copy of the JSON file (this will be used in the report generation)
-
+print("*** Creating a copy of the JSON file ***")
 json_copy = json
 path_json_copy = file.path(parent_folder, "results", paste0(experiment, "_json_copy.json"))
 json_copy$path_2_results$design_file = file2_design_copy

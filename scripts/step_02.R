@@ -24,6 +24,7 @@ library(ggplot2)
 # **********************************************************************
 
 # Reading the json file with the file paths
+print("*** Reading the input files ***")
 json = read_json(path2_json_file)
 
 # Extract the input file paths and variables from json
@@ -38,17 +39,17 @@ min_mean = json$input_variables$min_count_mean
 design = read.table(path2_design, header = TRUE, sep = "\t", row.names = 1)
 counts = read.table(path2_counts, header = TRUE, sep = "\t", row.names = 1)
 
-# Print a warnign if there are negative counts in the matrix:
+# Stop the program if there are negative counts in the matrix:
 
 if (any(counts < 0 )) { print("*** Error: not all numbers in the count matrix are positive ***");
   stop()
 }
 
-print("*** Filtering the count matrix accoring to the parameters set in the JSON input file")
-
+print("*** Rounding the count matrix to integers ***")
 # Round the count matrix, remove rowSums <= min_gene_tot_raw_counts (JSON), and filter for row with a mean above the
 # mean threshold set in the JSON file
 counts <- round_df(counts, digits = 0, rf = "round")
+print("*** Filtering the count matrix accoring to the parameters set in the JSON input file")
 counts = subset(counts, rowSums(counts)>min_rawcounts_rowsum)
 counts = subset(counts, apply(counts, 1, mean) > min_mean)
 
@@ -72,36 +73,8 @@ write.table(counts_stdev, file = output_sd, sep = '\t')
 # Construct the DeSeq data set to apply rlog()
 print("*** Constructing the DESeq Data set ***")
 print("*** Extracting the design formula from the JSON input file ***")
-# Extract the design formula from the json to use to perform PCA:
-# Note: the design formula needs to match the column name in the design file.
-for (i in 1:(length(json$design_formula))){
-  if (str_length(json$design_formula[[i]]) > 0){
-    nam <- paste0("formula", i)
-    assign(nam, json$design_formula[[i]])
-    last_number = i
-  }else if (str_length(json$design_formula[[i]]) <= 0){
-    print(" ")
-  }
-} 
 
-if (exists("formula1")){
-  print(paste("formula 1:", formula1))
-} else{
-  print("*** Error: the JSON does not contain a design formula and there is not default ***")
-  stop()
-}
-
-
-if(last_number == 1){
-    design_formula <- as.formula( paste( "~", as.name(formula1)) ) 
-  } else if(last_number == 2){
-    design_formula <- as.formula( paste( "~", as.name(formula1),"+", as.name(formula2) ) )
-  } else {
-    print("error in creating the design formula.
-          Go back to the JSON file anch check that under design formula
-          min. 1 and max. 2 terms are defined")
-  }
-
+design_formula = as.formula(paste0(as.name(as.character(json$design_formula$design)), ""))
 
 ## Construct the DeSeq data set using the countdata (countmatrix) and coldata (sample information)
 dds <- DESeqDataSetFromMatrix(countData = counts,
@@ -154,5 +127,38 @@ json_copy$input_variables$design_formula = as.character(design_formula)
 json_copy$figures$raw_mean_sd = as.character(figure1)
 write_json(json_copy, path_2_json_copy, auto_unbox = TRUE)
 
+
+
+################ The old way:
+
+# Extract the design formula from the json to use to perform PCA:
+# Note: the design formula needs to match the column name in the design file.
+# for (i in 1:(length(json$design_variable))){
+#   if (str_length(json$design_variable[[i]]) > 0){
+#     nam <- paste0("formula", i)
+#     assign(nam, json$design_variable[[i]])
+#     last_number = i
+#   }else if (str_length(json$design_variable[[i]]) <= 0){
+#     print(" ")
+#   }
+# } 
+
+# if (exists("formula1")){
+#   print(paste("formula 1:", formula1))
+# } else{
+#   print("*** Error: the JSON does not contain a design formula and there is not default ***")
+#   stop()
+# }
+# 
+# 
+# if(last_number == 1){
+#     design_formula <- as.formula( paste( "~", as.name(formula1)) ) 
+#   } else if(last_number == 2){
+#     design_formula <- as.formula( paste( "~", as.name(formula1),"+", as.name(formula2) ) )
+#   } else {
+#     print("error in creating the design formula.
+#           Go back to the JSON file anch check that under design formula
+#           min. 1 and max. 2 terms are defined")
+#   }
 
 

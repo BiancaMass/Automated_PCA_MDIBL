@@ -93,12 +93,13 @@ for (i in 1:(number_PC-3)){
 
 # Establish the cutoff line and save that line as last_meaningful:
 
-for (i in 1:(nrow(res))){
+for (i in 1:((nrow(res))-1)){
   if (res$R_squared[i] > max_Rsqured){
     break()
   }
   last_meaningful = i
 }
+
 
 # add the meaningful components values to the design file:
 

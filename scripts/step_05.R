@@ -80,12 +80,12 @@ output_pca = file.path(parent_folder, "results", paste0(experiment, "_pca_object
 write_rds(pca, output_pca)
 
 # Extract the design equation variables
-for (i in 1:(length(json$design_formula))){
-  if (str_length(json$design_formula[[i]]) > 0){
+for (i in 1:(length(json$design_variables))){
+  if (str_length(json$design_variables[[i]]) > 0){
     nam <- paste0("formula", i)
-    assign(nam, json$design_formula[[i]])
+    assign(nam, json$design_variables[[i]])
     last_number = i
-  }else if (str_length(json$design_formula[[i]]) <= 0){
+  }else if (str_length(json$design_variables[[i]]) <= 0){
     print(" ")
   }
 } 
@@ -202,31 +202,3 @@ json_copy$figures$PC1_PC2 = as.character(figure7)
 json_copy$figures$PC2_PC3 = as.character(figure8)
 write_json(json_copy, path_2_json_copy, auto_unbox = TRUE)
 
-
-
-# with log scale:
-# log.pca.var.per <- log(round(pcavar/sum(pcavar)*100,1))
-# barplot(log.pca.var.per, main = 'Scree Plot', xlab= "Principal Component #",
-#         ylab = "Percent Variation", ylim = c(0.001,5))
-
-
-
-
-
-
-
-#Reminder: loading scores are the proportion of how much each gene contributes
-# to each pricipal component (where samples are plotted in the PCA plot).
-# A large positive loading score will push sample to the right.
-# A large negative loading score will push sample to the left.
-# The higher the loading score, the more that gene was responsible for that PC.
-
-# Find the genes with the highest loading scores for each component
-# (therefore the ones that contributed the most to determine the
-# direction of that component):
-
-# For PC1:
-# gene.scores = abs(loadings[,1])
-# gene.scores.ranked = sort(gene.scores, decreasing = TRUE)
-# top_20_genes = names(gene.scores.ranked[1:20])
-# pca$rotation[top_20_genes,1]

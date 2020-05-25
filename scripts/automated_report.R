@@ -25,7 +25,7 @@ output_name = paste0(experiment, "_results")
 # Sys.setenv(RSTUDIO_PANDOC="/usr/lib/rstudio-server/bin/pandoc")
 
 rmarkdown::render(report_file,
-                  output_format = "html_document",
+                  output_format = c("html_document"),
                   output_file = output_name,
                   output_dir = output_directory,
                   params = list(

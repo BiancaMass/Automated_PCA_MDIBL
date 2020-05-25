@@ -41,12 +41,12 @@ stopifnot(rownames(pca$x) == rownames(design))
 # Create as many datasets as there are design formulas.
 
 # Create a list of the design formulas from the JSON file
-design_formulas = c(rep(0, length(json$design_formula)))
+design_formulas = c(rep(0, length(json$design_variables)))
 
-for (i in 1:(length(json$design_formula))){
-  if (str_length(json$design_formula[[i]]) > 0){
-    design_formulas[i] = json$design_formula[[i]]
-  }else if (str_length(json$design_formula[[i]]) <= 0){
+for (i in 1:(length(json$design_variables))){
+  if (str_length(json$design_variables[[i]]) > 0){
+    design_formulas[i] = json$design_variables[[i]]
+  }else if (str_length(json$design_variables[[i]]) <= 0){
     design_formulas = design_formulas[-i]
   }
 }

@@ -262,7 +262,7 @@ print(paste("R squared maximum threshold:", R_squared_threshold))
 ```{r}
 for (i in 1:length(json_copy$figures$scree_plot_cor)){
   figure_x = as.character(json_copy$figures$scree_plot_cor[i])
-  print(knitr::include_graphics(figure_x))
+  knitr::include_graphics(figure_x)
 }
 ```
 
@@ -271,7 +271,7 @@ for (i in 1:length(json_copy$figures$scree_plot_cor)){
 for (i in length(json_copy$path_2_results$correlation_table)){
   path_2_result_table = as.character(json_copy$path_2_results$correlation_table[i])
   result_table = read.table(file.path(path_2_result_table), header = TRUE, sep = "\t", row.names = 1)
-  print(kable(result_table, caption = path_2_result_table))
+  kable(result_table, caption = path_2_result_table)
 }
 ```
 

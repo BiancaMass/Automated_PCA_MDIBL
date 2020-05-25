@@ -66,8 +66,10 @@ Z = Z[gene_id_mn,]
 stopifnot(rownames(Z) == rownames(mean_subset))
 gene_id_sd = intersect(rownames(Z), rownames(sd_subset))
 Z = Z[gene_id_sd,]
+gene_ids = c(gene_id_mn, gene_id_sd)
+gene_ids = unique(gene_ids)
 #cannot do the stopifnot because mean and sd subset for different genes
-#stopifnot(rownames(Z) == (rownames(sd_subset)| rownames(mean_subset)))
+stopifnot(rownames(Z) == (rownames(gene_ids)))
 
 outputfile_path = file.path(parent_folder, "results", paste0(experiment , "_Z_threshold.txt"))
 write.table(Z, file = outputfile_path, sep = '\t')
