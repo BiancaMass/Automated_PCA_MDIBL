@@ -74,14 +74,20 @@ Example:
     "max_number_PC_regression":9
   },
   
-    "design_formula":{
-            "design1":"treatment",
-            "design2":"site"     
+    "design_variables":{
+            "design1":"design_equation_1",
+            "design2":"design_equation_2"
+            
+    },
+    
+     "design_formula":{
+            "design":"design_formula"
+            
     }  
 }
 ```
 
-Refer to *Operating Instructions* to know which variables to change in order to run the pipeline.
+Refer to *Operating Instructions* to know how to set up each variables to successfully run the pipeline. Numeric values displayed above correspond to default values.
 
 
 ## 2. Requirements
