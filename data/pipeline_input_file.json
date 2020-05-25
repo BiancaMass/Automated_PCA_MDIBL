@@ -2,39 +2,31 @@
   "input_files": {
     "infile1":"/home/mbianca/Documents/senior_project/automated_pca/data/vyin_008.mouse_heart_msi1436_2017.all.design.txt",
     "infile2":"/home/mbianca/Documents/senior_project/automated_pca/data/deleteme.vyin_008.mouse_heart_msi1436_2017.all.counts.txt",
-    "experiment_name": "vyin_008.mouse_heart_msi1436_2017"
+    "experiment_name": "008_may25"
   },
   
   "folders":{
     "parent_folder":"/home/mbianca/Documents/senior_project/automated_pca"
   },
   
-  "input_varibles":{
+  "input_variables":{
+    "min_gene_tot_raw_count": 1,
+    "min_count_mean":0,
     "mean_precentage_threshold":0.25,
     "sd_precentage_threshold":0.25,
-    "min_count_mean":0
-    
-  },
-  
-  "output_files":{
-    "design_file":"",
-    "counts_means":"",
-    "counts_sd":"",
-    "normalized_counts":"",
-    "Z_normalized":"",
-    "Z_mean_sd":"",
-    "Z_filtered":"",
-    "loading_scores":"",
-    "eigen_values":"",
-    "pca_object":""
-    
-    
+    "R_squared_threshold":0.95,
+    "max_number_PC_regression":9
     
   },
     
-    "design_formula":{
+    "design_variables":{
             "design1":"site",
             "design2":"treatment"
+            
+    },
+    
+     "design_formula":{
+            "design":"site~treatment"
             
     }
     
