@@ -24,11 +24,11 @@ To run the pipeline, do the following:
 
 3. Save the scripts from in the scripts folder (scripts are in the /scripts folder of this GitHub repository).
 
-4. Open the bash script "bash_automated_pca.sh"
+4. Open the bash script "bash\_automated_pca.sh"
 
 5. Change the following variables in the bash script:
   - PARENT_DIR=~/path/2/your/parent/folder/
-  - JSON_FILE_NAME=name_of_your_json.json
+  - JSON\_FILE\_NAME=name\_of\_your_json.json
 
 6. Save and close the bash file.
   
@@ -197,18 +197,29 @@ Follows a description of the each output file by storing directory. All .txt fil
 
   - /figures:
 	
-	1.  ExperimentName_cor_plot_1.png
-	2.  ExperimentName_cor_plot_2.png
-	3.  ExperimentName_log10scree_plot.png
-	4.  ExperimentNamemean_histogram.png
-	5.  ExperimentNamePC1_PC2.png
-	6.  ExperimentNamePC2_PC3.png
-	7.  ExperimentNameraw_mean_sd.png
-	8.  ExperimentName_regression_plot.png
-	9.  ExperimentName_rlog_vsd_mean_sd.png
-	10. ExperimentNamescree_plot.png
-	11. ExperimentNamesd_histogram.png
-	12. ExperimentNameZ_mean_sd.png
+	1.  ExperimentName\_cor_plot_1.png : Correlation plot between design_variables$design1 from the JSON and the coordinate of each sample on each meaningful PC.
+
+	2.  ExperimentName\_cor_plot_2.png : Optional plot, only if design\_variables$design2 exists. Correlation plot between design\_variables$design2 from the JSON and the coordinate of each sample on each meaningful PC.
+
+	3.  ExperimentName\_log10scree_plot.png : Scree plot with Eigenvalues converted to log10. 
+
+	4.  ExperimentNamemean\_histogram.png : Histogram of the raw standard deviations (of each gene acrosss all samples). The dotted line represent filtering threshold as indicated in json\$input\_variables$mean\_precentage_threshold.
+
+	5.  ExperimentNamePC1\_PC2.png : PC1 vs PC2 coordinates with percentage of variance explained. Text is determined by json\$design\_variables\$design1, color by json\$design\_variables\$design2.
+
+	6.  ExperimentNamePC2_PC3.png : PC2 vs PC3 coordinates with percentage of variance explained. Text is determined by json\$design\_variables\$design1, color by json\$design\_variables\$design2.
+
+	7.  ExperimentNameraw\_mean_sd.png : mean vs sd for each gene across sample of the raw count matrix.
+
+	8.  ExperimentName\_regression\_plot.png : Linear regression of the log10 Eigenvalues vs PC number for 1->N, 2->N.... x->N where N is the total number of PCs and x is the max number of regressions as indicated in json\$input\_variables\$max_number_PC_regression.
+
+	9.  ExperimentName\_rlog\_vsd\_mean_sd.png : mean vs standard deviation for each gene across sample of the standardized count matrix (with DESeq2::rlog or DESeq2::vst).
+
+	10. ExperimentNamescree_plot.png : Regular scree plot of the experiment.
+
+	11. ExperimentNamesd\_histogram.png : Histogram of the raw standard deviations (of each gene acrosss all samples). The dotted line represent filtering threshold as indicated in json\$input\_variables$mean\_precentage_threshold.
+
+	12. ExperimentNameZ\_mean_sd.png : mean vs standard deviation of each gene across all samples after Z-transormation (sd should be == 1, mean should be very close to 0). 
 
   - /report:
 	1. ExperimentName_results.html
