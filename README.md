@@ -222,7 +222,7 @@ Follows a description of the each output file by storing directory. All .txt fil
 	12. ExperimentNameZ\_mean_sd.png : mean vs standard deviation of each gene across all samples after Z-transormation (sd should be == 1, mean should be very close to 0). 
 
   - /report:
-	1. ExperimentName_results.html
+	1. ExperimentName_results.html : The automated report with a summary of each step, plots, and outputs.
 
 ## 5. Provided files list
 
