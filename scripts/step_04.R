@@ -8,9 +8,6 @@ print(args)
 path2_json_file = args[1]
 
 # **********************************************************************
-# Hard coded to test
-# path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
-
 # Load the necessary libraries
 print("Loading libraries")
 options(stringsAsFactors = FALSE)
@@ -68,7 +65,6 @@ gene_id_sd = intersect(rownames(Z), rownames(sd_subset))
 Z = Z[gene_id_sd,]
 gene_ids = c(gene_id_mn, gene_id_sd)
 gene_ids = unique(gene_ids)
-#cannot do the stopifnot because mean and sd subset for different genes
 stopifnot(rownames(Z) == (rownames(gene_ids)))
 
 outputfile_path = file.path(parent_folder, "results", paste0(experiment , "_Z_threshold.txt"))
@@ -104,7 +100,3 @@ json_copy$path_2_results$Z_threshold = as.character(outputfile_path)
 json_copy$figures$sd_histogram = as.character(figure4)
 json_copy$figures$mean_histogram = as.character(figure5)
 write_json(json_copy, path_2_json_copy, auto_unbox = TRUE)
-
-
-
-
