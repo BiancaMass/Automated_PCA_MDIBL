@@ -210,11 +210,30 @@ Follows a description of the each output file by storing directory. All .txt fil
 	11. ExperimentNamesd_histogram.png
 	12. ExperimentNameZ_mean_sd.png
 
-
-
-# *** Instert output list ***
+  - /report:
+	1. ExperimentName_results.html
 
 ## 5. Provided files list
+
+The files provided and needed for the correct functioning of the pipeline are the following:
+
+  - /scripts:
+	1.  automated_report.R
+	2.  bash\_automated_pca.sh
+	3.  final_report.Rmd
+	4.  step_01.R
+	5.  step_02.R
+	6.  step_03.R
+	7.  step_04.R
+	8.  step_05.R
+	9.  step_06.R
+	10. step_07.R
+
+  - /data:
+	1. pipeline\_input_file.json
+
+
+
 ## 6. Copyright and licensing 
 ## 7. Contact information
 ## 8. Known bugs
