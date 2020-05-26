@@ -3,7 +3,7 @@
 
 ### Change these variables:
 
-PARENT_DIR=~/Documents/senior_project/automated_pca/
+PARENT_DIR=/path/to/parent/folder/
 JSON_FILE_NAME=pipeline_input_file.json
 
 
