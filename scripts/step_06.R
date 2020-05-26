@@ -9,8 +9,6 @@ print(args)
 path2_json_file = args[1]
 
 # **********************************************************************
-# Hard coded to test
-# path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
 
 ## Load in the necessary libraries:
 options(stringsAsFactors = FALSE)
@@ -100,7 +98,6 @@ for (i in 1:((nrow(res))-1)){
   last_meaningful = i
 }
 
-
 # add the meaningful components values to the design file:
 
 design_meaningful_PC = design
@@ -174,5 +171,3 @@ json_copy$path_2_results$pc_vs_eigen = as.character(output_pc_eigen)
 json_copy$figures$scree_plot_log10 = as.character(figure9)
 json_copy$figures$regression_plot = as.character(figure10)
 write_json(json_copy, path_2_json_copy, auto_unbox = TRUE)
-
-
