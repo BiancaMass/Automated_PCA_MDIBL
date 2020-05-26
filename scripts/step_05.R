@@ -145,11 +145,11 @@ if (exists("formula2")){
           axis.text.y=element_blank()))
   dev.off()
 } else if (!exists("formula2") & !exists("formula1")){
-  print("*** Error: Missing design formula. Please check the JSON input file ***")
+  print("--- Error: Missing design variable. Please check the JSON input file ***")
 } else if (exists("formula2") & !exists("formula1")){
-  print("*** Error: please change the JSON file. If there is only one design variable, save it under design1 ***")
+  print("--- Error: please change the JSON file. If there is only one design variable, save it under design1 ***")
 } else {
-  print("*** Error: there is a problem with the design formula. Please check the JSON input file ***")
+  print("--- Error: there is a problem with the design formula. Please check the JSON input file ***")
 }
 
 
