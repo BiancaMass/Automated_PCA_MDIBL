@@ -1,16 +1,10 @@
 ## A script that for each meaningful principal component regresses on the design equation variables.
-## Standards to determine whether the component has an association with experimental design:
-## p-value <= 0.06
-## abs(slope) >= 0.3
 
 args = base::commandArgs(trailingOnly = TRUE)
 print(args)
 path2_json_file = args[1]
 
 # **********************************************************************
-# Hard coded to test
-# path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
-
 ## Load in the necessary libraries:
 options(stringsAsFactors = FALSE)
 options(bitmapType='cairo')
