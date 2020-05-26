@@ -1,19 +1,26 @@
 ---
 title: "Final Report"
-output: html_document
+output:
+  html_document:
+    toc: true
+    toc_depth: 4
 Author: "Bianca Matilde Massacci"
 params:
-  json: "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
+  json: "/home/mbianca/Downloads/experiment/data/pipeline_input_file.json"
 ---
 
 ```{r}
 knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
 library(jsonlite)
 library(ggplot2)
 library(grid)
 library(gridExtra)
 library(genefilter)
 library(knitr)
+library(stringr)
 ```
 
 ```{r}
@@ -259,19 +266,40 @@ print(paste("R squared maximum threshold:", R_squared_threshold))
 
 ### step_07.R
 
+Step 7 performs regression of the design equation variable vs each meaningful PC.
+Variables for regression are taken from the input_json$design_variables. In this case they were:
+
 ```{r}
-for (i in 1:length(json_copy$figures$scree_plot_cor)){
-  figure_x = as.character(json_copy$figures$scree_plot_cor[i])
-  knitr::include_graphics(figure_x)
+if (str_length(json$design_variables$design1) > 0 ){
+  print(paste("variable1:", json$design_variables$design1))
+}
+
+if (str_length(json$design_variables$design2) > 0 ){
+  print(paste("variable2:", json$design_variables$design2))
 }
 ```
 
 
-```{r}
-for (i in length(json_copy$path_2_results$correlation_table)){
-  path_2_result_table = as.character(json_copy$path_2_results$correlation_table[i])
-  result_table = read.table(file.path(path_2_result_table), header = TRUE, sep = "\t", row.names = 1)
-  kable(result_table, caption = path_2_result_table)
+```{r out.width="50%", out.height="50%"}
+all_figures = c()
+for (i in 1:length(json_copy$figures$scree_plot_cor)){
+  all_figures[i] = as.character(json_copy$figures$scree_plot_cor[i])
 }
+ 
+knitr::include_graphics(all_figures)
+```
+
+
+```{r}
+all_tables = c()
+for (i in 1:length(json_copy$path_2_results$correlation_table)){
+  all_tables[i] = as.character(json_copy$path_2_results$correlation_table[i])
+}
+
+for (j in 1:length(all_tables)){
+  result_table = read.table(file.path(all_tables[i]), header = TRUE, sep = "\t", row.names = 1)
+  print(kable(result_table, caption = as.character(all_tables[i])))
+}
+
 ```
 
