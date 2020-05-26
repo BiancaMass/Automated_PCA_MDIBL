@@ -39,11 +39,9 @@ To run the pipeline, do the following:
   -  "parent_folder": full path to your parent folder e.g. "/home/user/projects/pipeline"
   -  "design_variables"$"design1": Column header from the design file e.g. "site". It should be identical as the header in the design file (no typos, careful with white spaces). This parameter is used to calculate correlation between each meaningful PC and the parameter itself. The program calculates linear correlation with no interaction terms. It is also used to generate a corrrelation plot and to label points in a PC plot. 
   -  "design_variables"$"design2": Column header from the design file e.g. "treatment". It should be identical as the header in the design file (no typos, careful with white spaces). This parameter is used to calculate correlation between each meaningful PC and the parameter itself. The program calculates linear correlation with no interaction terms. It is also used to generate a corrrelation plot and to label points in a PC plot. It can be empty.
-  -  "design_formula"$"design": The design formula used to construct a DESeq2 data set e.g. "~ group + treatment". This will be fed as the 'design' argument in DESeqDataSetFromMatrix(). Refer to the package [documentation](https://www.rdocumentation.org/packages/DESeq2/versions/1.12.3/topics/DESeqDataSet-class) for more information on the design formula.
+  -  "design_formula"$"design": The design formula used to construct a DESeq2 data set e.g. "~ group + treatment". This will be fed as the 'design' argument in DESeqDataSetFromMatrix(). Refer to the package [documentation](https://www.rdocumentation.org/packages/DESeq2/versions/1.12.3/topics/DESeqDataSet-class) for more information on the design formula. Note: if there is no design formula, "~1" can be used for no design.
 
 The other variables in the JSON file are numeric parameters that can be optionally changed to fit the analysis. Under the *Input files* section there is a description of what each numeric parameter is used for.
-
-# *** Insert more details on design1 and design2 ***
   
  6. In the terminal, cd to the parent_folder/scripts and run the following command:
  bash bash_automated_pca.sh
