@@ -175,10 +175,41 @@ The outputs of the pipeline can be found in the following subdirectories:
   - /figures
   - /report
 
-Follows a description of the each output file by storing directory:
+Follows a description of the each output file by storing directory. All .txt files are tab separated.
 
   - /results:
-  	- file1
+	1.  ExperimentName\_design_meaningful.txt
+	2.  ExperimentName_design.txt
+	3.  ExperimentName\_genecounts_means.txt
+	4.  ExperimentName\_genecounts_sd.txt
+	5.  ExperimentName\_json_copy.json
+	6.  ExperimentName\_meaningful\_pc_loading_scores.txt
+	7.  ExperimentName\_pca_eigenvalues.txt
+	8.  ExperimentName\_pca\_loading_scores.txt
+	9.  ExperimentName\_pca_object.rds
+	10. ExperimentName\_regression\_pc_eigen.txt
+	11. ExperimentName\_rld_normalized.txt
+	12. ExperimentName\_site_correlation.txt
+	13. ExperimentName\_treatment_correlation.txt
+	14. ExperimentName\_Z_mean_stdev.txt
+	15. ExperimentName\_Z_normalized.txt
+	16. ExperimentName\_Z_threshold.txt
+
+  - /figures:
+	
+	1.  ExperimentName_cor_plot_1.png
+	2.  ExperimentName_cor_plot_2.png
+	3.  ExperimentName_log10scree_plot.png
+	4.  ExperimentNamemean_histogram.png
+	5.  ExperimentNamePC1_PC2.png
+	6.  ExperimentNamePC2_PC3.png
+	7.  ExperimentNameraw_mean_sd.png
+	8.  ExperimentName_regression_plot.png
+	9.  ExperimentName_rlog_vsd_mean_sd.png
+	10. ExperimentNamescree_plot.png
+	11. ExperimentNamesd_histogram.png
+	12. ExperimentNameZ_mean_sd.png
+
 
 
 # *** Instert output list ***
