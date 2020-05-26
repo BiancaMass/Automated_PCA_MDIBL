@@ -5,10 +5,6 @@ print(args)
 path2_json_file = args[1]
 
 # **********************************************************************
-
-# Hard coded to test
-# path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
-
 # Load the necessary libraries
 print("*** Loading libraries ***")
 options(stringsAsFactors = FALSE)
@@ -126,39 +122,3 @@ dev.off()
 json_copy$input_variables$design_formula = as.character(design_formula)
 json_copy$figures$raw_mean_sd = as.character(figure1)
 write_json(json_copy, path_2_json_copy, auto_unbox = TRUE)
-
-
-
-################ The old way:
-
-# Extract the design formula from the json to use to perform PCA:
-# Note: the design formula needs to match the column name in the design file.
-# for (i in 1:(length(json$design_variable))){
-#   if (str_length(json$design_variable[[i]]) > 0){
-#     nam <- paste0("formula", i)
-#     assign(nam, json$design_variable[[i]])
-#     last_number = i
-#   }else if (str_length(json$design_variable[[i]]) <= 0){
-#     print(" ")
-#   }
-# } 
-
-# if (exists("formula1")){
-#   print(paste("formula 1:", formula1))
-# } else{
-#   print("*** Error: the JSON does not contain a design formula and there is not default ***")
-#   stop()
-# }
-# 
-# 
-# if(last_number == 1){
-#     design_formula <- as.formula( paste( "~", as.name(formula1)) ) 
-#   } else if(last_number == 2){
-#     design_formula <- as.formula( paste( "~", as.name(formula1),"+", as.name(formula2) ) )
-#   } else {
-#     print("error in creating the design formula.
-#           Go back to the JSON file anch check that under design formula
-#           min. 1 and max. 2 terms are defined")
-#   }
-
-
