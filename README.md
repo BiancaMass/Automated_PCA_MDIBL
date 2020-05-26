@@ -37,9 +37,9 @@ To run the pipeline, do the following:
   -  "infile2": full path to your design file. e.g. "/home/user/projects/pipeline/data/exp_estcounts.txt"
   -  "experiment_name": name of your experiment. This is used to name output files. e.g. "exp"
   -  "parent_folder": full path to your parent folder e.g. "/home/user/projects/pipeline"
-  -  "design_variables"$"design1": . Note: this is used to generate a PC plot.
-  -  "design_variables"$"design2": . Note: this is used to generate a PC plot.
-  -  "design_formula"$"design": The design formula used to construct a DESeq2 data set e.g. "~ group + treatment". This will be fed as the 'design' argument in DESeqDataSetFromMatrix(). Refer to the [documentation](https://www.rdocumentation.org/packages/DESeq2/versions/1.12.3/topics/DESeqDataSet-class) for more information on the design formula.
+  -  "design_variables"$"design1": Column header from your design file e.g. "group". Note: this is used to generate a PC plot.
+  -  "design_variables"$"design2": Column header from your design file e.g. "treatment". Note: this is used to generate a PC plot.
+  -  "design_formula"$"design": The design formula used to construct a DESeq2 data set e.g. "~ group + treatment". This will be fed as the 'design' argument in DESeqDataSetFromMatrix(). Refer to the package [documentation](https://www.rdocumentation.org/packages/DESeq2/versions/1.12.3/topics/DESeqDataSet-class) for more information on the design formula.
 
 The other variables in the JSON file are numeric parameters that can be optionally changed to fit the analysis. Under the *Input files* section there is a description of what each numeric parameter is used for.
 
@@ -48,7 +48,7 @@ The other variables in the JSON file are numeric parameters that can be optional
  6. In the terminal, cd to the parent_folder/scripts and run the following command:
  bash bash_automated_pca.sh
 
-
+ 7. The pipeline will run and save its outputs in sub-folders in the parent directory. See *Outputs* for more information.
 
 ## 2. Requirements
 The pipeline is written in R scripts called from a bash script.
@@ -190,4 +190,3 @@ Follows a description of the each output file by storing directory:
 ## 7. Contact information
 ## 8. Known bugs
 ## 9. Credits and acknowledgements
-
