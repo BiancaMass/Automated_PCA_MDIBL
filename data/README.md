@@ -1,30 +1,3 @@
 # Data Repository
 
-This README file is divided into three sections:
-  1. A description of the required format for the design file
-  1. A description of the required format for the estimated counts file
-  1. A description of the required format for the JSON file
-
-
-## 1. Design file
-
-
-## 2. Estimated count matrix
-
-
-## 3. JSON
-The json file contains a list of variables in the form of file paths or numbers. File paths will need to match the file paths of your data files. You can change the numeric parameters to fit your analysis needs. If you will not change them, the pipeline will use default parameters. Follows a list of the variables and their description.
-
-- "input_files":
-    - "infile1":"path/to/design_file.txt",
-    - "infile2":"path/to/estcountsmatrix.txt",
-    - "experiment_name": "name_of_your_experiment" (used to name the output files automatically saved in /results directory)
-    
-- "folders":
-   - "parent_folder":"path/to/your/parent_folder" (containing /data, /results, /scripts, /report)
-   
-- "input_varibles":
-    - "mean_precentage_threshold":0.25,
-    - "sd_precentage_threshold":0.25,
-    - "min_count_mean":0
-
+You will find information on the input files requirements in the README.md saved in BiancaMass/Automated_PCA_MDIBL
