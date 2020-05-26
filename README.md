@@ -20,7 +20,7 @@ To run the pipeline, do the following:
 - scripts
 - data
 
-2. Save your data (estimated count matrices and design files) in the data folder, together with the json input file (found in the /data folder of this GitHub repository).
+2. Save your data (estimated count matrices and design files) in the data folder, together with the json input file (found in the /data folder of this GitHub repository). Note: there are specific formatting requirements for the design and count matrices files, as specified in the *Inputs* section.
 
 3. Save the scripts from in the scripts folder (scripts are in the /scripts folder of this GitHub repository).
 
