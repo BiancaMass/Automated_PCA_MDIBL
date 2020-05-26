@@ -43,10 +43,10 @@ To run the pipeline, do the following:
 
 The other variables in the JSON file are numeric parameters that can be optionally changed to fit the analysis. Under the *Input files* section there is a description of what each numeric parameter is used for.
   
- 7. In the terminal, cd to the parent_folder/scripts and run the following command:
+ 8. In the terminal, cd to the parent_folder/scripts and run the following command:
  bash bash_automated_pca.sh
 
- 8. The pipeline will run and save its outputs in sub-folders in the parent directory. See *Outputs* for more information.
+ 9. The pipeline will run and save its outputs in sub-folders in the parent directory. See *Outputs* for more information.
 
 ## 2. Requirements
 The pipeline is written in R scripts called from a bash script.
