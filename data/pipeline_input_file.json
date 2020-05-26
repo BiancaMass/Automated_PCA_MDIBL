@@ -26,7 +26,7 @@
     },
     
      "design_formula":{
-            "design":"design ~ formula"
+            "design":"~design + formula"
             
     }
     
