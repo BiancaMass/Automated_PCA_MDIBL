@@ -1,5 +1,5 @@
 # Automated_PCA_MDIBL
-This repository contains a pipeline that identifies unexpected variables in an expression data matrix. It performs normalization on the count matrix, PC Analysis, and regression on the PCs vs experimental design. Once unexpected variables are identified, their PC coordinates are captured into a modified design file, to be used for downstream analysis as surrogates of e unexpected variable(s).
+This repository contains a pipeline that identifies unexpected variables in an expression data matrix. It performs normalization on the count matrix, PC Analysis, and regression on the PCs vs experimental design. Once unexpected variables are identified, their PC coordinates are captured into a modified design file, to be used for downstream analysis as surrogates of unexpected variable(s).
 
 
 1. Operating instructions
@@ -32,13 +32,13 @@ To run the pipeline, do the following:
 
 6. Save and close the bash file.
   
-7. Open your JSON input file. Change the following variables to fit your file paths and desired parameters:
+7. Open your JSON input file (stored in parent_folder/data). Change the following variables to fit your file paths and desired parameters:
   -  "infile1": full path to your design file. e.g. "/home/user/projects/pipeline/data/exp_design.txt"
-  -  "infile2": full path to your design file. e.g. "/home/user/projects/pipeline/data/exp_estcounts.txt"
+  -  "infile2": full path to your counts file. e.g. "/home/user/projects/pipeline/data/exp_estcounts.txt"
   -  "experiment_name": name of your experiment. This is used to name output files. e.g. "exp"
   -  "parent_folder": full path to your parent folder e.g. "/home/user/projects/pipeline"
-  -  "design_variables"$"design1": Column header from the design file e.g. "site". It should be identical as the header in the design file (no typos, careful with white spaces). This parameter is used to calculate correlation between each meaningful PC and the parameter itself. The program calculates linear correlation with no interaction terms. It is also used to generate a corrrelation plot and to label points in a PC plot. 
-  -  "design_variables"$"design2": Column header from the design file e.g. "treatment". It should be identical as the header in the design file (no typos, careful with white spaces). This parameter is used to calculate correlation between each meaningful PC and the parameter itself. The program calculates linear correlation with no interaction terms. It is also used to generate a corrrelation plot and to label points in a PC plot. It can be empty.
+  -  "design_variables"$"design1": Column header from the design file e.g. "site". It should be identical as the header in the design file (no typos, careful with white spaces). This parameter is used to calculate correlation between each meaningful PC and the parameter itself. The program calculates linear correlation with no interaction terms. It is also used to generate a correlation plot and to label points in a PC plot. 
+  -  "design_variables"$"design2": Column header from the design file e.g. "treatment". It should be identical as the header in the design file (no typos, careful with white spaces). This parameter is used to calculate correlation between each meaningful PC and the parameter itself. The program calculates linear correlation with no interaction terms. It is also used to generate a correlation plot and to label points in a PC plot. It can be empty.
   -  "design_formula"$"design": The design formula used to construct a DESeq2 data set e.g. "~ group + treatment". This will be fed as the 'design' argument in DESeqDataSetFromMatrix(). Refer to the package [documentation](https://www.rdocumentation.org/packages/DESeq2/versions/1.12.3/topics/DESeqDataSet-class) for more information on the design formula. Note: if there is no design formula, "~1" can be used for no design.
 
 The other variables in the JSON file are numeric parameters that can be optionally changed to fit the analysis. Under the *Input files* section there is a description of what each numeric parameter is used for.
