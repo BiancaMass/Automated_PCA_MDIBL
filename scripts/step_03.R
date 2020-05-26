@@ -8,8 +8,6 @@ print(args)
 path2_json_file = args[1]
 
 # **********************************************************************
-# Hard coded to test
-# path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
 
 print("*** Loading libraries ***")
 options(stringsAsFactors = FALSE)
@@ -92,5 +90,3 @@ json_copy$path_2_results$Z_with_mean_sd = as.character(output_Z_ms)
 json_copy$figures$rld_mean_sd = as.character(figure1)
 json_copy$figures$Z_mean_sd = as.character(figure2)
 write_json(json_copy, path_2_json_copy, auto_unbox = TRUE)
-
-
