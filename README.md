@@ -37,8 +37,8 @@ To run the pipeline, do the following:
   -  "infile2": full path to your design file. e.g. "/home/user/projects/pipeline/data/exp_estcounts.txt"
   -  "experiment_name": name of your experiment. This is used to name output files. e.g. "exp"
   -  "parent_folder": full path to your parent folder e.g. "/home/user/projects/pipeline"
-  -  "design_variables"$"design1": Column header from your design file e.g. "group". Note: this is used to generate a PC plot.
-  -  "design_variables"$"design2": Column header from your design file e.g. "treatment". Note: this is used to generate a PC plot.
+  -  "design_variables"$"design1": Column header from your design file e.g. "site". Note: this is used to generate a PC plot and it will determine text. e.g. if the "site" column in the design file contains "heart" and "liver", points in the PC plot will be labeled either "heart" or "liver".
+  -  "design_variables"$"design2": Column header from your design file e.g. "treatment". Note: this is used to generate a PC plot and it will determine the color of the points. e.g. "treatment" will color points according to the treatment column in the design file.
   -  "design_formula"$"design": The design formula used to construct a DESeq2 data set e.g. "~ group + treatment". This will be fed as the 'design' argument in DESeqDataSetFromMatrix(). Refer to the package [documentation](https://www.rdocumentation.org/packages/DESeq2/versions/1.12.3/topics/DESeqDataSet-class) for more information on the design formula.
 
 The other variables in the JSON file are numeric parameters that can be optionally changed to fit the analysis. Under the *Input files* section there is a description of what each numeric parameter is used for.
