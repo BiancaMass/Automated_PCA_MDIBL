@@ -37,7 +37,7 @@ inputs = c(path2_counts, path2_design)
 for (i in 1:length(inputs)){
   exis = file.exists(inputs[i])
   if (exis == FALSE){
-    print(c("Error: the input file does not exist. Path to input:",inputs[i]), quote = FALSE)
+    print(c("--- Error: the input file does not exist. Path to input:",inputs[i]), quote = FALSE)
     stop()
   }
 }
@@ -45,7 +45,7 @@ for (i in 1:length(inputs)){
 for (i in 1:length(inputs)){
   info = file.info(inputs[i])
   if (info$size <= 0){
-    print(c("Error: the input file is empty. Path to input:",inputs[i]), quote = FALSE)
+    print(c("--- Error: the input file is empty. Path to input:",inputs[i]), quote = FALSE)
     stop()
   }
 }
@@ -57,7 +57,7 @@ counts = read.table(path2_counts, header = TRUE, sep = "\t", row.names = 1)
 print("Checking that the est. counts matrix has no NAs")
 ##Check that the matrix has no NAs. If there are, print a warning message:
 if(sum(is.na(counts)) > 0){
-  print('--- Warning: there are NAs in the count matrix')
+  print('--- Error: there are NAs in the count matrix')
 }
 
 print("*** Checking for a 1-1 correspondence between sample names in the two files ***")
@@ -67,7 +67,7 @@ print("*** Checking for a 1-1 correspondence between sample names in the two fil
 
 for (i in 1:length(rownames(design)==colnames(counts))){
   if ((rownames(design)==colnames(counts))[i] ==  FALSE){
-    print("Error: There is not a 1-1 correspondence between samples in the design and count files", quote = FALSE)
+    print("--- Error: There is not a 1-1 correspondence between samples in the design and count files", quote = FALSE)
     print("samples not matching:", quote = FALSE)
     print(rownames(design)[i])
     print(colnames(counts)[i])
