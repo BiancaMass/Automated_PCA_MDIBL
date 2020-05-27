@@ -13,15 +13,9 @@ path2_json_file = args[1]
 ## Load in the necessary libraries:
 options(stringsAsFactors = FALSE)
 options(bitmapType='cairo')
-library(pcaMethods)
-library(Gviz)
-library(forestmangr)
 library(genefilter)
 library(jsonlite)
-library(dplyr)
-library(factoextra)
 library(readr)
-library(latticeExtra)
 library(ggplot2)
 
 # Read in input files:

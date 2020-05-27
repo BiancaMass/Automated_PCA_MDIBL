@@ -3,7 +3,7 @@
 
 ### Change these variables:
 
-PARENT_DIR=/path/to/parent/folder/
+PARENT_DIR=/home/mbianca/Downloads/27_1420/
 JSON_FILE_NAME=pipeline_input_file.json
 
 
@@ -46,46 +46,78 @@ echo data folder: ${DATA_FOLDER}
 echo report folder: ${REPORT_FOLDER}
 echo scripts folder: ${SCRIPTS_FOLDER}
 echo results folder: ${RESULTS_FOLDER}
-echo json file path: ${JSON_PATH}
+echo json path: ${JSON_PATH}
 
 echo "********************************************"
 echo Entering step_01.R
 Rscript ${SCRIPTS_FOLDER}step_01.R ${JSON_PATH}
+if [ $? != 0 ]; then
+  echo "script01.R failed"
+  exit 0
+fi
 echo Leaving step_01.R
 
 echo "********************************************"
 echo Entering step_02.R
 Rscript ${SCRIPTS_FOLDER}step_02.R ${JSON_PATH}
+if [ $? != 0 ]; then
+  echo "script02.R failed"
+  exit 0
+fi
 echo Leaving step_02.R
 
 echo "********************************************"
 echo Entering step_03.R
 Rscript ${SCRIPTS_FOLDER}step_03.R ${JSON_PATH}
+if [ $? != 0 ]; then
+  echo "script03.R failed"
+  exit 0
+fi
 echo Leaving step_03.R
 
 echo "********************************************"
 echo Entering step_04.R
 Rscript ${SCRIPTS_FOLDER}step_04.R ${JSON_PATH}
+if [ $? != 0 ]; then
+  echo "script04.R failed"
+  exit 0
+fi
 echo Leaving step_04.R
 
 echo "********************************************"
 echo Entering step_05.R
 Rscript ${SCRIPTS_FOLDER}step_05.R ${JSON_PATH}
+if [ $? != 0 ]; then
+  echo "script05.R failed"
+  exit 0
+fi
 echo Leaving step_05.R
 
 echo "********************************************"
 echo Entering step_06.R
 Rscript ${SCRIPTS_FOLDER}step_06.R ${JSON_PATH}
+if [ $? != 0 ]; then
+  echo "script06.R failed"
+  exit 0
+fi
 echo Leaving step_06.R
 
 echo "********************************************"
 echo Entering step_07.R
 Rscript ${SCRIPTS_FOLDER}step_07.R ${JSON_PATH}
+if [ $? != 0 ]; then
+  echo "script07.R failed"
+  exit 0
+fi
 echo Leaving step_07.R
 
 echo "********************************************"
 echo Entering automated_report.R
 echo "*** This script calls an R markdown that will save an automated report file in the report folder ***"
 Rscript ${SCRIPTS_FOLDER}automated_report.R ${JSON_PATH}
+if [ $? != 0 ]; then
+  echo "automated_report.R failed"
+  exit 0
+fi
 echo Leaving automated_report.R
 

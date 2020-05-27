@@ -15,7 +15,6 @@ library(forestmangr)
 library(DESeq2)
 library(genefilter)
 library(stringr)
-library(SparkR)
 library(ggplot2)
 
 # **********************************************************************
