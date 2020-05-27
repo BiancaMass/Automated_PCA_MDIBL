@@ -128,17 +128,9 @@ To run the pipeline, do the following:
 
 2. Save your data (estimated count matrices and design files) in the data folder, together with the JSON input file (found in the /data folder of this GitHub repository). Note: there are specific formatting requirements for the design and count matrices files, as specified in the *Input files* section.
 
-3. Save the scripts from in the scripts folder (scripts are in the /scripts folder of this GitHub repository).
-
-4. Open the bash script "bash\_automated_pca.sh"
-
-5. Change the following variables in the bash script:
-  - PARENT_DIR=~/path/2/your/parent/folder/
-  - JSON\_FILE\_NAME=name\_of\_your_json.json
-
-6. Save and close the bash file.
+3. Save and close the bash file.
   
-7. Open your JSON input file (stored in parent_folder/data). Change the following variables to fit your file paths and desired parameters:
+4. Open your JSON input file (stored in parent_folder/data). Change the following variables to fit your file paths and desired parameters:
   -  "infile1": full path to your design file. e.g. "/home/user/projects/pipeline/data/exp_design.txt"
   -  "infile2": full path to your counts file. e.g. "/home/user/projects/pipeline/data/exp_estcounts.txt"
   -  "experiment_name": name of your experiment. This is used to name output files. e.g. "exp"
@@ -149,10 +141,15 @@ To run the pipeline, do the following:
 
 The other variables in the JSON file are numeric parameters that can be optionally changed to fit the analysis. Under the *Input files* section there is a description of what each numeric parameter is used for.
   
- 8. In the terminal, cd to the parent_folder/scripts and run the following command:
- bash bash_automated_pca.sh
+ 5. In the terminal, cd to the parent_folder/scripts and call the bash script "bash_automated_pca.sh" with two arguments:
+ 	- the full path to your parent folder
+	- the name of the JSON input file (stored in parent_folder/data)
+ 
+ The command should look as follow:
+ 
+ bash bash_automated_pca.sh ~/path/2/your/parent/folder/ name\_of\_your_json.json
 
- 9. The pipeline will run and save its outputs in sub-folders in the parent directory. See *Outputs* for more information.
+ 6. The pipeline will run and save its outputs in sub-folders in the parent directory. See *Outputs* for more information.
 
 
 ## 4. Outputs
