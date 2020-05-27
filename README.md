@@ -128,7 +128,7 @@ To run the pipeline, do the following:
 
 2. Save your data (estimated count matrices and design files) in the data folder, together with the JSON input file (found in the /data folder of this GitHub repository). Note: there are specific formatting requirements for the design and count matrices files, as specified in the *Input files* section.
 
-3. Save and close the bash file.
+3. Save the scripts from in the scripts folder (scripts are in the /scripts folder of this GitHub repository).
   
 4. Open your JSON input file (stored in parent_folder/data). Change the following variables to fit your file paths and desired parameters:
   -  "infile1": full path to your design file. e.g. "/home/user/projects/pipeline/data/exp_design.txt"
