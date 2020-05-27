@@ -6,10 +6,10 @@ output:
     toc_depth: 4
 Author: "Bianca Matilde Massacci"
 params:
-  json: "/home/mbianca/Downloads/experiment/data/pipeline_input_file.json"
+  json: ""
 ---
 
-```{r}
+```{r include = FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
@@ -32,6 +32,8 @@ experiment = json$input_files$experiment_name
 json_copy = read_json(file.path(parent_folder, "results", paste0(experiment, "_json_copy.json")))
 ```
 
+Date and time:
+
 ```{r echo = FALSE}
 print(Sys.time())
 ```
@@ -43,6 +45,8 @@ In this report you will find:
 - A summary of what each step in the pipeline does
 
 - Summary plots
+
+- Output tables
 
 ## Input files
 The input file can be found at the following location on your machine:
@@ -86,17 +90,17 @@ It performs the following operations:
 
 - Rounds the count matrix
 
-- Removes rows with few counts according to the variable set in the json:input_variables:min_gene_tot_raw_count.
+- Removes rows with few counts according to the variable set in the json:input_variables->min_gene_tot_raw_count.
 
-- Filters for rows with a mean above the mean threshold set in the json:input_variables:mean_precentage_threshold.
+- Filters for rows with a mean above the mean threshold set in the json:input_variables->mean_precentage_threshold.
 
 - Calculates mean and standard deviation for each gene across all samples.
 
-- Constructs a DESeq data set using the counts matrix, the design matrix, and as a design formula the one indicated in json:design_formula:design1 and, if present design 2.
+- Constructs a DESeq data set using the counts matrix, the design matrix, and as a design formula the one indicated in json->design_formula->design.
 
 - Uses rlog() or vst() to normalized the count matrix, preparing it for PCA.
 
-The gene means and standard deviations (before any normalization) can be found at:
+The means and standard deviations of each gene across samples (before any normalization) can be found at:
 
 ```{r}
 path_2_counts_mean = json_copy$path_2_results$genecounts_means
@@ -105,7 +109,7 @@ print(paste("gene counts means: ", path_2_counts_mean))
 print(paste("gene counts standard deviations: ", path_2_counts_sd))
 ```
 
-The normalized matrix can be found at:
+The rlog() or vst() normalized matrix can be found at:
 
 ```{r}
 if (file.exists(as.character(json_copy$path_2_results$normalized_rld))){
@@ -130,7 +134,7 @@ if (file.exists(as.character(json_copy$path_2_results$normalized_rld))){
 
 
 ### step_03.R
-Step 3 further normalized the matrix appliying a Z-transformation such that $Z = (x-mean) / standard  deviation$ . It does so by performing the following operations:
+Step 3 further normalized the matrix appliying a Z-transformation such that $Z = (x-mean) / standardDeviation$ . It does so by performing the following operations:
 
 - Removes rows with few counts according to the variable set in the json:input_variables:min_gene_tot_raw_count.
 
@@ -155,15 +159,15 @@ figure2 = json_copy$figures$rld_mean_sd
 figure3 = json_copy$figures$Z_mean_sd
 ```
 
-```{r echo=FALSE, out.width = '50%', fig.cap="Fig 1. Mean vs standard deviation for the estimated counts matrix after beinf filtered or rows with a mean above the minimum threshold as set in the JSON (step 1 and 2)"}
+```{r echo=FALSE, out.width = '50%', fig.cap="Fig 1. Mean vs standard deviation for the estimated count matrix after rows with a mean above the minimum threshold were filtered out(step 1 and 2)"}
 knitr::include_graphics(figure1)
 ```
 
-```{r echo=FALSE, out.width = '50%', fig.cap="Fig 2. Mean vs standard deviation after rld() or vsd() transformation"}
+```{r echo=FALSE, out.width = '50%', fig.cap="Fig 2. Mean vs standard deviation after rlog() or vst() transformation"}
 knitr::include_graphics(figure2)
 ```
 
-```{r echo=FALSE, out.width = '50%', fig.cap="Fig 3. Mean vs standard deviation after Z transformation. If the pipeline worked properly, mean should be very close to 0 and standard deviations should be == 1"}
+```{r echo=FALSE, out.width = '50%', fig.cap="Fig 3. Mean vs standard deviation after Z transformation. If the pipeline worked properly, mean should be very close to 0 and standard deviations should be == 1."}
 knitr::include_graphics(figure3)
 ```
 
@@ -178,6 +182,7 @@ Step 4 reduces to genes with either sufficient variation or average expression l
 
 Below is a visualization of the threshold. Note: the threshold is based on the estimated raw counts (before normalization), but it is applied after raw counts have been filtered in the first passages of step 02 (before the construction of the DESeq data set). See step 02 above.
 In step 04, after determining the value corresponding to the threshold set in the JSON (e.g. the first quartile by default), the script saves the gene names with mean and sd values above the threshold, and filters the Z matrix to only keep those genes.
+The x-axis in the figures below has a log10 scale.
 
 ```{r}
 figure4 = json_copy$figures$sd_histogram
@@ -185,11 +190,11 @@ figure5 = json_copy$figures$mean_histogram
 ```
 
 
-```{r echo = FALSE, out.width = '50%', fig.cap= "Figure 4."}
+```{r echo = FALSE, out.width = '50%', fig.cap= "Figure 4. Histogram of the standard deviation of the raw counts. Dotted blue line is the filtering threshold."}
 knitr::include_graphics(figure4)
 ```
 
-```{r echo = FALSE, out.width = '50%', fig.cap= "Figure 5."}
+```{r echo = FALSE, out.width = '50%', fig.cap= "Figure 5. Histogram of the mean of the raw counts. Dotted blue line is the filtering threshold."}
 knitr::include_graphics(figure5)
 ```
 
@@ -201,9 +206,9 @@ Step 05 performs principal component analysis (PCA) on the normalized and filter
 
 - Checks that the rows' standard deviations of the normalized and filtered matrix are equal to 1.
 
-- Performs PCA using prcomp()
+- Performs PCA using prcomp().
 
-- Saves the PC object as an rds, and the loading scores as a table
+- Saves the PC object as an RDS (R object), and the loading scores as a table.
 
 
 ```{r}
@@ -225,16 +230,23 @@ knitr::include_graphics(figure8)
 ```
 
 ### step_06.R
-Step 6 performs linear regression on the Eigenvalues vs component number, in order to select for meaningful principal components. The idea is that the first components will explain the variance in the data, while the last ones will only be noise, and should not be considered for the analysis. In order to determine which components are noise and which are not, we regress on the PC number from 1->N, 2->N, ... N-2 -> N where N is the number of PCs. If N > 9, we stop the regression at N = 9.
+Step 6 performs linear regression on the Eigenvalues vs component number, in order to select for meaningful principal components. The idea is that the first components will explain the variance in the data, while the last ones will only be noise, and should not be considered for the analysis. In order to determine which components are noise and which are not, we regress on the PC number from 1->N, 2->N, ... N-2 -> N where N is the number of PCs. If N > 9, we stop the regression at N = 9 (or at N = json->input_variables->max_number_PC_regression.
 We extract the results of each regression including slope, intercept, R-squared, and adjusted R-squared. R-squared measures how close the data are to the fitted regression line. e.g. for only 2 points, R squared will = 1 because the fit line will pass through both points.
-For our purposes, the higher is the R-squared valued, the more the eigenvalues for the considered PCs will be similar, and therefore those PCs can be considered noise. This will be clear when looking at the plot below. The threshold for a maximum R-squared is set in the JSON file. Default = 0.95.
+For our purposes, the higher is the R-squared valued, the more the eigenvalues for the considered PCs will be similar, and therefore those PCs can be considered noise. This will be clear when looking at the plot below. The threshold for a maximum adjusted R-squared is set in the JSON file. Default = 0.95.
 After determining the meaningful components, the script saves a new design file with each meaningful PC added as a new column.
 
-The design file with the added meanngful components can be found at:
+```{r}
+path_design_new = as.character(json_copy$path_2_results$design_meaningful)
+design_new = read.table(file.path(path_design_new), header = TRUE, sep = "\t", row.names = 1)
+kable(design_new)
+```
+
+It can be found at:
 
 ```{r}
 print(json_copy$path_2_results$design_meaningful)
 ```
+
 
 ```{r}
 figure9 = json_copy$figures$scree_plot_log10
@@ -266,7 +278,7 @@ print(paste("R squared maximum threshold:", R_squared_threshold))
 
 ### step_07.R
 
-Step 7 performs regression of the design equation variable vs each meaningful PC.
+Step 7 performs regression of the design equation variable vs each meaningful PC. To perform further analysis (e.g. correlation with interaction terms, refer to the design file with the added meaningful PCs, output of step_06).
 Variables for regression are taken from the input_json$design_variables. In this case they were:
 
 ```{r}
@@ -297,8 +309,8 @@ for (i in 1:length(json_copy$path_2_results$correlation_table)){
 }
 
 for (j in 1:length(all_tables)){
-  result_table = read.table(file.path(all_tables[i]), header = TRUE, sep = "\t", row.names = 1)
-  print(kable(result_table, caption = as.character(all_tables[i])))
+  result_table = read.table(file.path(all_tables[j]), header = TRUE, sep = "\t", row.names = 1)
+  print(kable(result_table, caption = as.character(all_tables[j])))
 }
 
 ```
