@@ -10,7 +10,7 @@ This repository contains a pipeline that identifies unexpected variables in an e
 6. Copyright and licensing 
 7. Contact information
 8. Known bugs
-9. Credits and acknowledgements
+9. Credits and acknowledgments
 
 ## 1. Operating instructions
 
@@ -20,7 +20,7 @@ To run the pipeline, do the following:
 - scripts
 - data
 
-2. Save your data (estimated count matrices and design files) in the data folder, together with the json input file (found in the /data folder of this GitHub repository). Note: there are specific formatting requirements for the design and count matrices files, as specified in the *Input files* section.
+2. Save your data (estimated count matrices and design files) in the data folder, together with the JSON input file (found in the /data folder of this GitHub repository). Note: there are specific formatting requirements for the design and count matrices files, as specified in the *Input files* section.
 
 3. Save the scripts from in the scripts folder (scripts are in the /scripts folder of this GitHub repository).
 
@@ -37,8 +37,8 @@ To run the pipeline, do the following:
   -  "infile2": full path to your counts file. e.g. "/home/user/projects/pipeline/data/exp_estcounts.txt"
   -  "experiment_name": name of your experiment. This is used to name output files. e.g. "exp"
   -  "parent_folder": full path to your parent folder e.g. "/home/user/projects/pipeline"
-  -  "design_variables"$"design1": Column header from the design file e.g. "site". It should be identical as the header in the design file (no typos, careful with white spaces). This parameter is used to calculate correlation between each meaningful PC and the parameter itself. The program calculates linear correlation with no interaction terms. It is also used to generate a correlation plot and to label points in a PC plot. 
-  -  "design_variables"$"design2": Column header from the design file e.g. "treatment". It should be identical as the header in the design file (no typos, careful with white spaces). This parameter is used to calculate correlation between each meaningful PC and the parameter itself. The program calculates linear correlation with no interaction terms. It is also used to generate a correlation plot and to label points in a PC plot. It can be empty.
+  -  "design_variables"$"design1": Column header from the design file e.g. "site". It should be identical to the header in the design file (no typos, careful with white spaces). This parameter is used to calculate the correlation between each meaningful PC and the parameter itself. The program calculates linear correlation with no interaction terms. It is also used to generate a correlation plot and to label points in a PC plot. 
+  -  "design_variables"$"design2": Column header from the design file e.g. "treatment". It should be identical to the header in the design file (no typos, careful with white spaces). This parameter is used to calculate the correlation between each meaningful PC and the parameter itself. The program calculates linear correlation with no interaction terms. It is also used to generate a correlation plot and to label points in a PC plot. It can be empty.
   -  "design_formula"$"design": The design formula used to construct a DESeq2 data set e.g. "~ group + treatment". This will be fed as the 'design' argument in DESeqDataSetFromMatrix(). Refer to the package [documentation](https://www.rdocumentation.org/packages/DESeq2/versions/1.12.3/topics/DESeqDataSet-class) for more information on the design formula. Note: if there is no design formula, "~1" can be used for no design.
 
 The other variables in the JSON file are numeric parameters that can be optionally changed to fit the analysis. Under the *Input files* section there is a description of what each numeric parameter is used for.
@@ -85,8 +85,8 @@ Below are the format requirements for the input files.
 - Estimated counts matrix.
   - Text file, tab ("\t") separated.
   - Gene IDs are in rows, samples are in columns
-  - First column contains the row names (gene_ids)
-  - First row contains the column headers ("gene_id" and then sample names)
+  - The first column contains the row names (gene_ids)
+  - The first row contains the column headers ("gene_id" and then sample names)
 
 Example:
 
@@ -100,7 +100,7 @@ Example:
 - Design matrix
   - Text file, tab ("\t") separated
   - The first row contains column headers
-  - First column contains the sample names *that need to be exactly the same as column names 2:N of the count matrix*
+  - The first column contains the sample names *that need to be exactly the same as column names 2:N of the count matrix*
     Note: if this is not the case, the program will throw an error and stop.
   - The other columns contain information about each sample
   
@@ -175,25 +175,41 @@ The outputs of the pipeline can be found in the following subdirectories:
   - /figures
   - /report
 
-Follows a description of the each output file by storing directory. All .txt files are tab separated.
+Follows a description of each output file by storing directory. All .txt files are tab-separated.
 
   - /results:
 	1.  ExperimentName\_design_meaningful.txt
+	
 	2.  ExperimentName_design.txt
+	
 	3.  ExperimentName\_genecounts_means.txt
+	
 	4.  ExperimentName\_genecounts_sd.txt
+	
 	5.  ExperimentName\_json_copy.json
+	
 	6.  ExperimentName\_meaningful\_pc_loading_scores.txt
+	
 	7.  ExperimentName\_pca_eigenvalues.txt
+	
 	8.  ExperimentName\_pca\_loading_scores.txt
+	
 	9.  ExperimentName\_pca_object.rds
+	
 	10. ExperimentName\_regression\_pc_eigen.txt
+	
 	11. ExperimentName\_rld_normalized.txt
+	
 	12. ExperimentName\_site_correlation.txt
+	
 	13. ExperimentName\_treatment_correlation.txt
+	
 	14. ExperimentName\_Z_mean_stdev.txt
+	
 	15. ExperimentName\_Z_normalized.txt
+	
 	16. ExperimentName\_Z_threshold.txt
+	
 
   - /figures:
 	
@@ -203,7 +219,7 @@ Follows a description of the each output file by storing directory. All .txt fil
 
 	3.  ExperimentName\_log10scree_plot.png : Scree plot with Eigenvalues converted to log10. 
 
-	4.  ExperimentNamemean\_histogram.png : Histogram of the raw standard deviations (of each gene acrosss all samples). The dotted line represent filtering threshold as indicated in json\$input\_variables$mean\_precentage_threshold.
+	4.  ExperimentNamemean\_histogram.png : Histogram of the raw standard deviations (of each gene across all samples). The dotted line represent filtering threshold as indicated in json\$input\_variables$mean\_precentage_threshold.
 
 	5.  ExperimentNamePC1\_PC2.png : PC1 vs. PC2 coordinates with percentage of variance explained. Text is determined by json\$design\_variables\$design1, color by json\$design\_variables\$design2.
 
@@ -217,7 +233,7 @@ Follows a description of the each output file by storing directory. All .txt fil
 
 	10. ExperimentNamescree_plot.png : Regular scree plot of the experiment.
 
-	11. ExperimentNamesd\_histogram.png : Histogram of the raw standard deviations (of each gene acrosss all samples). The dotted line represent filtering threshold as indicated in json\$input\_variables$mean\_precentage_threshold.
+	11. ExperimentNamesd\_histogram.png : Histogram of the raw standard deviations (of each gene across all samples). The dotted line represent filtering threshold as indicated in json\$input\_variables$mean\_precentage_threshold.
 
 	12. ExperimentNameZ\_mean_sd.png : mean vs. standard deviation of each gene across all samples after Z-transormation (sd should be == 1, mean should be very close to 0). 
 
