@@ -1,4 +1,5 @@
-# A script that normalizes the expression matrix using rlog()
+# A script that normalizes the expression matrix using rlog() or vst() depending on matrix size.
+# Cut-off: ncol count matrix <= 30 for rlog(), else vst().
 
 args = base::commandArgs(trailingOnly = TRUE)
 print(args)
