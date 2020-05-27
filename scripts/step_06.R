@@ -11,6 +11,7 @@ path2_json_file = args[1]
 # **********************************************************************
 
 ## Load in the necessary libraries:
+print("*** Loading libraries ***")
 options(stringsAsFactors = FALSE)
 options(bitmapType='cairo')
 library(genefilter)
@@ -29,6 +30,7 @@ path_2_eigenvalues = file.path(parent_folder, "results", paste0(experiment, "_pc
 path_2_pca = file.path(parent_folder, "results", paste0(experiment, "_pca_object.rds"))
 
 # Extract the R-squared value from the JSON. Default R-squared threshold = 0.95.
+print("*** Extracting adjusted R-squared threshold value from the JSON ***")
 if (!is.numeric(json$input_variables$R_squared_threshold)){
   max_Rsqured = 0.95
 } else if (json$input_variables$R_squared_threshold > 1){
@@ -38,6 +40,7 @@ if (!is.numeric(json$input_variables$R_squared_threshold)){
 } else {max_Rsqured = json$input_variables$R_squared_threshold}
 
 # Extract the max number of PC for regression. Default = 10.
+print("*** Extracting the max number of PC to be used for regression ***")
 if (!is.numeric(json$input_variables$max_number_PC_regression)){
   max_PC_regression = 10
 } else if(json$input_variables$max_number_PC_regression<1){
@@ -69,6 +72,7 @@ res = data.frame(model_num  = rep(0, number_PC-3),
 
 # Performing linear regression to find meaningful components
 # Warning: doing up to (N-2)->N or up to JSON parameter for mac PC number (default = 10)
+print("*** Performing linear regression of log10 eigenvalues vs. PC number ***")
 for (i in 1:(number_PC-3)){
   if (i>max_PC_regression){
     break
@@ -88,10 +92,17 @@ for (i in 1:(number_PC-3)){
 for (i in 1:((nrow(res))-1)){
   if (res$R_squared[i] > max_Rsqured){
     break()
-  }
+  } 
   last_meaningful = i
 }
 
+if (!exists("last_meaningful")){
+  print("The program could not identify any meaningful components")
+  print("This is due to the adjusted R_squared threshold for the regression between Eigenvalue and PC number")
+  stop()
+}
+
+print("*** Adding the meaningful PCs coordinates to a copy of the design file ***")
 # add the meaningful components values to the design file:
 
 design_meaningful_PC = design
@@ -107,7 +118,7 @@ for (i in 1:last_meaningful){
 output_design_meaningful = file.path(parent_folder, "results", paste0(experiment, "_design_meaningful.txt"))
 write.table(design_meaningful_PC, file = output_design_meaningful, sep = '\t')
 
-
+print("*** Generating plots for the final report ***")
 # Plots for the final report:
 
 pca_var_log = as.data.frame(pca_var_log)
@@ -165,3 +176,4 @@ json_copy$path_2_results$pc_vs_eigen = as.character(output_pc_eigen)
 json_copy$figures$scree_plot_log10 = as.character(figure9)
 json_copy$figures$regression_plot = as.character(figure10)
 write_json(json_copy, path_2_json_copy, auto_unbox = TRUE)
+
