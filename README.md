@@ -236,13 +236,14 @@ The files provided and needed for the correct functioning of the pipeline are th
 	1.  automated_report.R
 	2.  bash\_automated_pca.sh
 	3.  final_report.Rmd
-	4.  step_01.R
-	5.  step_02.R
-	6.  step_03.R
-	7.  step_04.R
-	8.  step_05.R
-	9.  step_06.R
-	10. step_07.R
+	4.  step_00.R
+	5.  step_01.R
+	6.  step_02.R
+	7.  step_03.R
+	8.  step_04.R
+	9.  step_05.R
+	10.  step_06.R
+	11. step_07.R
 
   - /data:
 	1. pipeline\_input_file.json
