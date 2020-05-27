@@ -97,7 +97,7 @@ for (i in 1:((nrow(res))-1)){
 }
 
 if (!exists("last_meaningful")){
-  print("The program could not identify any meaningful components")
+  print("Error: The program could not identify any meaningful components")
   print("This is due to the adjusted R_squared threshold for the regression between Eigenvalue and PC number")
   stop()
 }
