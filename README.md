@@ -51,7 +51,7 @@ Example:
 - Design matrix
   - Text file, tab ("\t") separated
   - The first row contains column headers
-  - The first column contains the sample names *that need to be exactly the same as column names 2:N of the count matrix*
+  - The first column contains the sample names that need to be exactly the same as column names 2:N of the count matrix
     Note: if this is not the case, the program will throw an error and stop.
   - The other columns contain information about each sample
   
