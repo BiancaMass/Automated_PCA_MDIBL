@@ -252,7 +252,7 @@ The files provided and needed for the correct functioning of the pipeline are th
 
 ## 6. Copyright and licensing 
 ## 7. Contact information
-For any questions please contact Bianca Matilde Massacci at bianca.massacci@gmail.com
+For any questions please contact Bianca M. Massacci at bianca.massacci@gmail.com
 
 ## 8. Known bugs
 ## 9. Credits and acknowledgements
