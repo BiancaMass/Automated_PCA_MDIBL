@@ -17,31 +17,21 @@ The pipeline is written in R scripts called from a bash script.
 R version 3.6.2 (2019-12-12)
 
 #### Attached packages
-- latticeExtra_0.6-29
-- lattice_0.20-40   
-- readr_1.3.1    
-- factoextra_1.0.6  
-- dplyr_0.8.5      
-- Gviz_1.30.3    
-- pcaMethods_1.78.0  
-- ggplot2_3.3.0 
-- SparkR_2.4.5               
-- stringr_1.4.0  
-- genefilter_1.68.0  
-- DESeq2_1.26.0    
-- SummarizedExperiment_1.16.1
-- DelayedArray_0.12.2   
-- BiocParallel_1.20.1        
-- matrixStats_0.56.0    
-- Biobase_2.46.0           
-- GenomicRanges_1.38.0     
-- GenomeInfoDb_1.22.0   
-- IRanges_2.20.2           
-- S4Vectors_0.24.3  
-- BiocGenerics_0.32.0  
-- forestmangr_0.9.1       
-- jsonlite_1.6.1   
-- grDevices_3.6.2
+1.  library(DESeq2)
+2.  library(dplyr)
+3.  library(factoextra)
+4.  library(forestmangr)
+5.  library(genefilter)
+6.  library(ggplot2)
+7.  library(Gviz)
+8.  library(jsonlite)
+9.  library(knitr)
+10. library(latticeExtra)
+11. library(pcaMethods)
+12. library(readr)
+13. library(rmarkdown)
+14. library(SparkR)
+15. library(stringr)
 
 ## 2. Input files
 Below are the format requirements for the input files.
