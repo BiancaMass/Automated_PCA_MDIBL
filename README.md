@@ -1,5 +1,5 @@
 # Automated_PCA_MDIBL
-This repository contains a pipeline that identifies unexpected variables in an expression data matrix. It performs normalization on the count matrix, PC Analysis, and regression on the PCs vs experimental design. Once unexpected variables are identified, their PC coordinates are captured into a modified design file, to be used for downstream analysis as surrogates of unexpected variable(s).
+This repository contains a pipeline that identifies unexpected variables in an expression data matrix. It performs normalization on the count matrix, PC Analysis, and regression on the PCs vs. experimental design. Once unexpected variables are identified, their PC coordinates are captured into a modified design file, to be used for downstream analysis as surrogates of unexpected variable(s).
 
 
 1. Operating instructions
@@ -205,21 +205,21 @@ Follows a description of the each output file by storing directory. All .txt fil
 
 	4.  ExperimentNamemean\_histogram.png : Histogram of the raw standard deviations (of each gene acrosss all samples). The dotted line represent filtering threshold as indicated in json\$input\_variables$mean\_precentage_threshold.
 
-	5.  ExperimentNamePC1\_PC2.png : PC1 vs PC2 coordinates with percentage of variance explained. Text is determined by json\$design\_variables\$design1, color by json\$design\_variables\$design2.
+	5.  ExperimentNamePC1\_PC2.png : PC1 vs. PC2 coordinates with percentage of variance explained. Text is determined by json\$design\_variables\$design1, color by json\$design\_variables\$design2.
 
-	6.  ExperimentNamePC2_PC3.png : PC2 vs PC3 coordinates with percentage of variance explained. Text is determined by json\$design\_variables\$design1, color by json\$design\_variables\$design2.
+	6.  ExperimentNamePC2_PC3.png : PC2 vs. PC3 coordinates with percentage of variance explained. Text is determined by json\$design\_variables\$design1, color by json\$design\_variables\$design2.
 
-	7.  ExperimentNameraw\_mean_sd.png : mean vs sd for each gene across sample of the raw count matrix.
+	7.  ExperimentNameraw\_mean_sd.png : mean vs. sd for each gene across sample of the raw count matrix.
 
-	8.  ExperimentName\_regression\_plot.png : Linear regression of the log10 Eigenvalues vs PC number for 1->N, 2->N.... x->N where N is the total number of PCs and x is the max number of regressions as indicated in json\$input\_variables\$max_number_PC_regression.
+	8.  ExperimentName\_regression\_plot.png : Linear regression of the log10 Eigenvalues vs. PC number for 1->N, 2->N.... x->N where N is the total number of PCs and x is the max number of regressions as indicated in json\$input\_variables\$max_number_PC_regression.
 
-	9.  ExperimentName\_rlog\_vsd\_mean_sd.png : mean vs standard deviation for each gene across sample of the standardized count matrix (with DESeq2::rlog or DESeq2::vst).
+	9.  ExperimentName\_rlog\_vsd\_mean_sd.png : mean vs. standard deviation for each gene across sample of the standardized count matrix (with DESeq2::rlog or DESeq2::vst).
 
 	10. ExperimentNamescree_plot.png : Regular scree plot of the experiment.
 
 	11. ExperimentNamesd\_histogram.png : Histogram of the raw standard deviations (of each gene acrosss all samples). The dotted line represent filtering threshold as indicated in json\$input\_variables$mean\_precentage_threshold.
 
-	12. ExperimentNameZ\_mean_sd.png : mean vs standard deviation of each gene across all samples after Z-transormation (sd should be == 1, mean should be very close to 0). 
+	12. ExperimentNameZ\_mean_sd.png : mean vs. standard deviation of each gene across all samples after Z-transormation (sd should be == 1, mean should be very close to 0). 
 
   - /report:
 	1. ExperimentName_results.html : The automated report with a summary of each step, plots, and outputs.
@@ -247,5 +247,7 @@ The files provided and needed for the correct functioning of the pipeline are th
 
 ## 6. Copyright and licensing 
 ## 7. Contact information
+For any questions please contact Bianca Matilde Massacci at bianca.massacci@gmail.com
+
 ## 8. Known bugs
 ## 9. Credits and acknowledgements
