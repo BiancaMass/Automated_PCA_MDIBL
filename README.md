@@ -201,15 +201,15 @@ Follows a description of each output file by storing directory. All .txt files a
 	
 	11. ExperimentName\_rld_normalized.txt or. ExperimentName\_vst_normalized.txt -> Respectively, result of the rlog() or vst() normalization performed in step 2. Choice of function depends on matrix size (cut-off: ncol count matrix <= 30 for rlog(), else vst()).
 	
-	12. ExperimentName\_site_correlation.txt ->
+	12. ExperimentName\_xxxxxx_correlation.txt -> Output of the correlation test between each meaningful PC and the variable indicated in JSON -> design_variables -> design1. xxxxxx stands for that variable.
 	
-	13. ExperimentName\_treatment_correlation.txt
+	13. ExperimentName\_yyyyyy_correlation.txt -> Output of the correlation test between each meaningful PC and the variable indicated in JSON -> design_variables -> design2. yyyyyy stands for that variable. Optional, only if yyyyyy exists.
 	
-	14. ExperimentName\_Z_mean_stdev.txt
+	14. ExperimentName\_Z_mean_stdev.txt -> The counts table, after Z-transformation, with mean and sd after rlog() or vst() normalization (used for the Z-transformation itself).
 	
-	15. ExperimentName\_Z_normalized.txt
+	15. ExperimentName\_Z_normalized.txt -> The counts table, after Z-transformation (step 3).
 	
-	16. ExperimentName\_Z_threshold.txt
+	16. ExperimentName\_Z_threshold.txt -> The counts table after Z-transformation, and filtered for sufficient variation and expression level (step 4). Thresholds are indicated in JSON -> input_variables -> sd_precentage_threshold and JSON -> input_variables -> mean_precentage_threshold
 	
 
   - /figures:
