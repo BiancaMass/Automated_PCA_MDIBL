@@ -17,21 +17,18 @@ The pipeline is written in R scripts called from a bash script.
 R version 3.6.2 (2019-12-12)
 
 #### Attached packages
-1.  library(DESeq2)
-2.  library(dplyr)
-3.  library(factoextra)
-4.  library(forestmangr)
-5.  library(genefilter)
-6.  library(ggplot2)
-7.  library(Gviz)
-8.  library(jsonlite)
-9.  library(knitr)
-10. library(latticeExtra)
-11. library(pcaMethods)
-12. library(readr)
-13. library(rmarkdown)
-14. library(SparkR)
-15. library(stringr)
+1.  DESeq2
+2.  dplyr
+3.  factoextra
+4.  forestmangr
+5.  genefilter
+6.  ggplot2
+7.  jsonlite
+8.  knitr
+9.  readr
+10. rmarkdown
+11. stringr
+
 
 ## 2. Input files
 Below are the format requirements for the input files.
