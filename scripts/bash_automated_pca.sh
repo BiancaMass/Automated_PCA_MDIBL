@@ -1,15 +1,40 @@
 #!/bin/bash
 # Calls for each step in the automated PCA pipeline
 
-### Change these variables:
+### Check that the user gave the right number of arguments (2) in the terminal ###
+if [ "$#" -ne 2 ]; then
+    echo "Error. Illegal number of parameters"
+    echo "Please give 2 arguments when calling the bash:"
+    echo "Argument 1 -> path to the parent directory where the pipeline is stored"
+    echo "Argument 2 -> name of the json input file"
+    exit 1
+fi
 
-PARENT_DIR=/home/mbianca/Downloads/27_1420/
-JSON_FILE_NAME=pipeline_input_file.json
+### Assign the command arguments to the following variables ###
+PARENT_DIR=$1
+JSON_FILE_NAME=$2
+
+### Check that parent_dir exists (argument 1) ###
+if [ -d ${PARENT_DIR} ] 
+then
+    echo "Directory ${PARENT_DIR} exists." 
+else
+    echo "Error: Directory ${PARENT_DIR} does not exists."
+    exit 1
+fi
+
+### Check that json file exists (argument 2) ###
+if [ -f ${PARENT_DIR}data/${JSON_FILE_NAME} ] 
+then
+    echo "File ${JSON_FILE_NAME} exists." 
+else
+    echo "Error: File ${JSON_FILE_NAME} does not exists or is not stored in the right location."
+    echo "Please make sure that the json input file exists and is stored in ${PARENT_DIR}data/"
+    exit 1
+fi
 
 
-##########################################
-######## Do not change below here ########
-##########################################
+### Create folders to store the outputs ###
 
 echo "*** Create a report folder if it does not exist ***"
 if [ ! -d ${PARENT_DIR}report ] 
