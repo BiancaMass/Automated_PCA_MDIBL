@@ -52,7 +52,7 @@ number_PC = length(columns)
 print("*** Performing the correlation test and generating plots ***")
 ### A loop that performs the following operations: ###
 # extract the column from the design file for each design formula (e.g. column "site")
-# performs a cor.test between each design formula (e.g. control vs treatment) and each meaningful PC
+# performs a cor.test between each design formula (e.g. "sex": "M" or "F") and each meaningful PC
 # saves results to a table
 # plot the correlations and saves the plots in the figures folder (for the automated report)
 
@@ -110,11 +110,18 @@ for (formula in 1:length(design_formulas)){
 }
 
 
+# save the updated json copy 
+write_json(json_copy, path_2_json_copy, auto_unbox = TRUE)
+
+
+# Following steps to come:
+# Perform a regression with interaction terms
+# Filter for p-value and correlation coefficient to establish whether the meaningful PCs have strong correlation
+# with the design equations variables
+
 
 ### Find if meaningful PCs have association with the experimental design
 ### Boundaries for p-value and correlation coefficient
-
-
 ## Find the principal component that explain the design equation
 ## Standards chosen: p-value = 0.5
 ## abs(slope) >= 0.3
@@ -133,9 +140,4 @@ for (formula in 1:length(design_formulas)){
 # output_sig_res = file.path(parent_folder, "results", paste0(experiment, "_significant_PC_vs_designformula.txt"))
 # write.table(significant_results, file = output_sig_res, sep = '\t')
 
-
-# save the updated json copy 
-write_json(json_copy, path_2_json_copy, auto_unbox = TRUE)
-
-#citation("pcaMethods")
 
