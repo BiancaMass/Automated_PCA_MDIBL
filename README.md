@@ -3,7 +3,7 @@ This repository contains a pipeline that identifies unexpected variables in an e
 
 
 1. Requirements
-2. Input files
+2. Input files format
 3. Operating instructions
 4. Outputs
 5. Provided files list
@@ -16,7 +16,7 @@ This repository contains a pipeline that identifies unexpected variables in an e
 The pipeline is written in R scripts called from a bash script.
 R version 3.6.2 (2019-12-12)
 
-#### Attached packages
+#### Required packages
 1.  DESeq2
 2.  dplyr
 3.  factoextra
@@ -30,7 +30,7 @@ R version 3.6.2 (2019-12-12)
 11. stringr
 
 
-## 2. Input files
+## 2. Input files format
 Below are the format requirements for the input files.
 
 - Estimated counts matrix.
@@ -256,3 +256,4 @@ For any questions please contact Bianca Matilde Massacci at bianca.massacci@gmai
 
 ## 8. Known bugs
 ## 9. Credits and acknowledgements
+I thank Joel Graber, Ph.D. Senior Staff Scientist and Director of Computational Biology and Bioinformatics Core at the MDI Biological Laboratory, and Daniel M. Gatti, Ph.D. Faculty of Computer Science at College of the Atlantic for helping me in the process of designing and completing this project.
