@@ -49,6 +49,15 @@ echo results folder: ${RESULTS_FOLDER}
 echo json path: ${JSON_PATH}
 
 echo "********************************************"
+echo Entering step_00.R
+Rscript ${SCRIPTS_FOLDER}step_00.R
+if [ $? != 0 ]; then
+  echo "script00.R failed"
+  exit 0
+fi
+echo Leaving step_00.R
+
+echo "********************************************"
 echo Entering step_01.R
 Rscript ${SCRIPTS_FOLDER}step_01.R ${JSON_PATH}
 if [ $? != 0 ]; then
