@@ -32,6 +32,12 @@ experiment = json$input_files$experiment_name
 json_copy = read_json(file.path(parent_folder, "results", paste0(experiment, "_json_copy.json")))
 ```
 
+Experiment name:
+
+```{r}
+print(as.character(json$input_files$experiment_name))
+```
+
 Date and time:
 
 ```{r echo = FALSE}
