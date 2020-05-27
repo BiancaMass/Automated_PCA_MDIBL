@@ -1,5 +1,5 @@
 # Automated_PCA_MDIBL
-This repository contains a pipeline that identifies unexpected variables in an expression data matrix. It performs normalization on the count matrix, PC Analysis, and regression on the PCs vs. experimental design. Once unexpected variables are identified, their PC coordinates are captured into a modified design file, to be used for downstream analysis as surrogates of unexpected variable(s).
+This repository contains a pipeline that identifies unexpected variables in an expression data matrix. It performs normalization on the count matrix, PC Analysis, and regression on the PCs vs. experimental design. Once meaningful principal components are identified, their coordinates are captured into a modified design file, to perform further regression and, in case no correlation is found between PC and design equation variables, to be used for downstream analysis as surrogates of unexpected variable(s).
 
 
 1. Operating instructions
@@ -178,29 +178,30 @@ The outputs of the pipeline can be found in the following subdirectories:
 Follows a description of each output file by storing directory. All .txt files are tab-separated.
 
   - /results:
-	1.  ExperimentName\_design_meaningful.txt
+	1.  ExperimentName\_design_meaningful.txt -> a copy of the design matrix with coordinates of the samples on each meaningful PC appended as new columns.
 	
-	2.  ExperimentName_design.txt
 	
-	3.  ExperimentName\_genecounts_means.txt
+	2.  ExperimentName_design.txt -> A copy of the input design file.
 	
-	4.  ExperimentName\_genecounts_sd.txt
+	3.  ExperimentName\_genecounts_means.txt -> 
 	
-	5.  ExperimentName\_json_copy.json
+	4.  ExperimentName\_genecounts_sd.txt -> 
 	
-	6.  ExperimentName\_meaningful\_pc_loading_scores.txt
+	5.  ExperimentName\_json_copy.json -> A copy of the input JSON file, with appended file paths to output tables, figures and objects.
 	
-	7.  ExperimentName\_pca_eigenvalues.txt
+	6.  ExperimentName\_meaningful\_pc_loading_scores.txt -> Loading scores only of the PC that were found to be meaningful through linear regression (see step 6).
 	
-	8.  ExperimentName\_pca\_loading_scores.txt
+	7.  ExperimentName\_pca_eigenvalues.txt -> Eigenvalues for all PC, including raw values, explained variance in percent, and cumulative explained variance in percent. 
 	
-	9.  ExperimentName\_pca_object.rds
+	8.  ExperimentName\_pca\_loading_scores.txt -> Loading scores of all PCs.
 	
-	10. ExperimentName\_regression\_pc_eigen.txt
+	9.  ExperimentName\_pca_object.rds -> PCA R-object (RDS). Output of prcomp().
 	
-	11. ExperimentName\_rld_normalized.txt
+	10. ExperimentName\_regression\_pc_eigen.txt -> Results of the regression of Eigenvalues vs. component number as performed in step 6.
 	
-	12. ExperimentName\_site_correlation.txt
+	11. ExperimentName\_rld_normalized.txt or. ExperimentName\_vst_normalized.txt -> Respectively, result of the rlog() or vst() normalization performed in step 2. Choice of function depends on matrix size (cut-off: ncol count matrix <= 30 for rlog(), else vst()).
+	
+	12. ExperimentName\_site_correlation.txt ->
 	
 	13. ExperimentName\_treatment_correlation.txt
 	
