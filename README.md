@@ -2,9 +2,9 @@
 This repository contains a pipeline that identifies unexpected variables in an expression data matrix. It performs normalization on the count matrix, PC Analysis, and regression on the PCs vs. experimental design. Once meaningful principal components are identified, their coordinates are captured into a modified design file, to perform further regression and, in case no correlation is found between PC and design equation variables, to be used for downstream analysis as surrogates of unexpected variable(s).
 
 
-1. Operating instructions
-2. System requirements
-3. Input files
+1. Requirements
+2. Input files
+3. Operating instructions
 4. Outputs
 5. Provided files list
 6. Copyright and licensing 
@@ -12,43 +12,7 @@ This repository contains a pipeline that identifies unexpected variables in an e
 8. Known bugs
 9. Credits and acknowledgments
 
-## 1. Operating instructions
-
-To run the pipeline, do the following:
-
-1. Create a folder on your machine (parent folder), containing the following subfolders:
-- scripts
-- data
-
-2. Save your data (estimated count matrices and design files) in the data folder, together with the JSON input file (found in the /data folder of this GitHub repository). Note: there are specific formatting requirements for the design and count matrices files, as specified in the *Input files* section.
-
-3. Save the scripts from in the scripts folder (scripts are in the /scripts folder of this GitHub repository).
-
-4. Open the bash script "bash\_automated_pca.sh"
-
-5. Change the following variables in the bash script:
-  - PARENT_DIR=~/path/2/your/parent/folder/
-  - JSON\_FILE\_NAME=name\_of\_your_json.json
-
-6. Save and close the bash file.
-  
-7. Open your JSON input file (stored in parent_folder/data). Change the following variables to fit your file paths and desired parameters:
-  -  "infile1": full path to your design file. e.g. "/home/user/projects/pipeline/data/exp_design.txt"
-  -  "infile2": full path to your counts file. e.g. "/home/user/projects/pipeline/data/exp_estcounts.txt"
-  -  "experiment_name": name of your experiment. This is used to name output files. e.g. "exp"
-  -  "parent_folder": full path to your parent folder e.g. "/home/user/projects/pipeline"
-  -  "design_variables"$"design1": Column header from the design file e.g. "site". It should be identical to the header in the design file (no typos, careful with white spaces). This parameter is used to calculate the correlation between each meaningful PC and the parameter itself. The program calculates linear correlation with no interaction terms. It is also used to generate a correlation plot and to label points in a PC plot. 
-  -  "design_variables"$"design2": Column header from the design file e.g. "treatment". It should be identical to the header in the design file (no typos, careful with white spaces). This parameter is used to calculate the correlation between each meaningful PC and the parameter itself. The program calculates linear correlation with no interaction terms. It is also used to generate a correlation plot and to label points in a PC plot. It can be empty.
-  -  "design_formula"$"design": The design formula used to construct a DESeq2 data set e.g. "~ group + treatment". This will be fed as the 'design' argument in DESeqDataSetFromMatrix(). Refer to the package [documentation](https://www.rdocumentation.org/packages/DESeq2/versions/1.12.3/topics/DESeqDataSet-class) for more information on the design formula. Note: if there is no design formula, "~1" can be used for no design.
-
-The other variables in the JSON file are numeric parameters that can be optionally changed to fit the analysis. Under the *Input files* section there is a description of what each numeric parameter is used for.
-  
- 8. In the terminal, cd to the parent_folder/scripts and run the following command:
- bash bash_automated_pca.sh
-
- 9. The pipeline will run and save its outputs in sub-folders in the parent directory. See *Outputs* for more information.
-
-## 2. Requirements
+## 1. Requirements
 The pipeline is written in R scripts called from a bash script.
 R version 3.6.2 (2019-12-12)
 
@@ -79,7 +43,7 @@ R version 3.6.2 (2019-12-12)
 - jsonlite_1.6.1   
 - grDevices_3.6.2
 
-## 3. Input files
+## 2. Input files
 Below are the format requirements for the input files.
 
 - Estimated counts matrix.
@@ -166,6 +130,42 @@ Numeric values displayed above correspond to default values. Follows a descripti
   - "sd_precentage_threshold":0.25,
   - "R_squared_threshold":0.95,
   - "max_number_PC_regression":9
+
+## 3. Operating instructions
+
+To run the pipeline, do the following:
+
+1. Create a folder on your machine (parent folder), containing the following subfolders:
+- scripts
+- data
+
+2. Save your data (estimated count matrices and design files) in the data folder, together with the JSON input file (found in the /data folder of this GitHub repository). Note: there are specific formatting requirements for the design and count matrices files, as specified in the *Input files* section.
+
+3. Save the scripts from in the scripts folder (scripts are in the /scripts folder of this GitHub repository).
+
+4. Open the bash script "bash\_automated_pca.sh"
+
+5. Change the following variables in the bash script:
+  - PARENT_DIR=~/path/2/your/parent/folder/
+  - JSON\_FILE\_NAME=name\_of\_your_json.json
+
+6. Save and close the bash file.
+  
+7. Open your JSON input file (stored in parent_folder/data). Change the following variables to fit your file paths and desired parameters:
+  -  "infile1": full path to your design file. e.g. "/home/user/projects/pipeline/data/exp_design.txt"
+  -  "infile2": full path to your counts file. e.g. "/home/user/projects/pipeline/data/exp_estcounts.txt"
+  -  "experiment_name": name of your experiment. This is used to name output files. e.g. "exp"
+  -  "parent_folder": full path to your parent folder e.g. "/home/user/projects/pipeline"
+  -  "design_variables"$"design1": Column header from the design file e.g. "site". It should be identical to the header in the design file (no typos, careful with white spaces). This parameter is used to calculate the correlation between each meaningful PC and the parameter itself. The program calculates linear correlation with no interaction terms. It is also used to generate a correlation plot and to label points in a PC plot. 
+  -  "design_variables"$"design2": Column header from the design file e.g. "treatment". It should be identical to the header in the design file (no typos, careful with white spaces). This parameter is used to calculate the correlation between each meaningful PC and the parameter itself. The program calculates linear correlation with no interaction terms. It is also used to generate a correlation plot and to label points in a PC plot. It can be empty.
+  -  "design_formula"$"design": The design formula used to construct a DESeq2 data set e.g. "~ group + treatment". This will be fed as the 'design' argument in DESeqDataSetFromMatrix(). Refer to the package [documentation](https://www.rdocumentation.org/packages/DESeq2/versions/1.12.3/topics/DESeqDataSet-class) for more information on the design formula. Note: if there is no design formula, "~1" can be used for no design.
+
+The other variables in the JSON file are numeric parameters that can be optionally changed to fit the analysis. Under the *Input files* section there is a description of what each numeric parameter is used for.
+  
+ 8. In the terminal, cd to the parent_folder/scripts and run the following command:
+ bash bash_automated_pca.sh
+
+ 9. The pipeline will run and save its outputs in sub-folders in the parent directory. See *Outputs* for more information.
 
 
 ## 4. Outputs
