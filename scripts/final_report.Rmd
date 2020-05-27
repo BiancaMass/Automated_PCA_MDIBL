@@ -4,7 +4,7 @@ output:
   html_document:
     toc: true
     toc_depth: 4
-Author: "Bianca Matilde Massacci"
+Author: "Original markdown Bianca Massacci"
 params:
   json: ""
 ---
