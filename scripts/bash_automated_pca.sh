@@ -3,14 +3,14 @@
 
 ### Check that the user gave the right number of arguments (2) in the terminal ###
 if [ "$#" -ne 2 ]; then
-    echo "Error. Illegal number of parameters"
+    echo "--- Error. Illegal number of parameters"
     echo "Please give 2 arguments when calling the bash:"
-    echo "Argument 1 -> path to the parent directory where the pipeline is stored"
-    echo "Argument 2 -> name of the json input file"
+    echo "Argument 1 : path to the parent directory where the pipeline is stored"
+    echo "Argument 2 : name of the json input file"
     exit 1
 fi
 
-### Assign the command arguments to the following variables ###
+### Assign the command arguments ###
 PARENT_DIR=$1
 JSON_FILE_NAME=$2
 

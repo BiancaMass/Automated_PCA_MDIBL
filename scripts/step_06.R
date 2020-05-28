@@ -28,6 +28,8 @@ experiment = json$"input_files"$"experiment_name"
 path2_design = file.path(parent_folder, "results", paste0(experiment, "_design.txt"))
 path_2_eigenvalues = file.path(parent_folder, "results", paste0(experiment, "_pca_eigenvalues.txt"))
 path_2_pca = file.path(parent_folder, "results", paste0(experiment, "_pca_object.rds"))
+path_2_json_copy = file.path(parent_folder, "results", paste0(experiment, "_json_copy.json"))
+json_copy <- read_json(path_2_json_copy)
 
 # Extract the R-squared value from the JSON. Default R-squared threshold = 0.95.
 print("*** Extracting adjusted R-squared threshold value from the JSON ***")
@@ -84,6 +86,11 @@ for (i in 1:(number_PC-3)){
   res$R_squared[i] = summary(linear)$r.squared
   res$adj_R_squared[i] = summary(linear)$adj.r.squared
 }
+
+### Save the regression table
+output_pc_eigen = file.path(parent_folder, "results", paste0(experiment, "_regression_pc_eigen.txt"))
+write.table(res, file = output_pc_eigen, sep = '\t')
+json_copy$path_2_results$pc_vs_eigen = as.character(output_pc_eigen)
 
 # Find the significant PCs according to a max R_squared threshold
 
@@ -163,16 +170,11 @@ loadings_meaningful = pca$rotation[,1:last_meaningful]
 output_loadings_meaningful = file.path(parent_folder, "results", paste0(experiment, "_meaningful_pc_loading_scores.txt"))
 write.table(loadings_meaningful, file = output_loadings_meaningful, sep = '\t')
 
-### Save the regression table
-output_pc_eigen = file.path(parent_folder, "results", paste0(experiment, "_regression_pc_eigen.txt"))
-write.table(res, file = output_pc_eigen, sep = '\t')
+
 
 # Updating the json copy
-path_2_json_copy = file.path(parent_folder, "results", paste0(experiment, "_json_copy.json"))
-json_copy <- read_json(path_2_json_copy)
 json_copy$path_2_results$design_meaningful = as.character(output_design_meaningful)
 json_copy$path_2_results$meaningful_loading_scores = as.character(output_loadings_meaningful)
-json_copy$path_2_results$pc_vs_eigen = as.character(output_pc_eigen)
 json_copy$figures$scree_plot_log10 = as.character(figure9)
 json_copy$figures$regression_plot = as.character(figure10)
 write_json(json_copy, path_2_json_copy, auto_unbox = TRUE)
