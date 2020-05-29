@@ -5,7 +5,7 @@ print(args)
 path2_json_file = args[1]
 
 # Hard coded to test
-# path2_json_file = "~/Documents/senior_project/automated_pca/data/pipeline_input_file.json"
+# path2_json_file = "/home/mbianca/Downloads/28_17/data/pasilla_json.json"
 
 library(knitr)
 library(jsonlite)
@@ -29,14 +29,6 @@ rmarkdown::render(report_file,
                   output_file = output_name,
                   output_dir = output_directory,
                   params = list(
-                    json = path2_json_file))
+                    json = path2_json_file,
+                    set_subtitle = paste("Experiment:", experiment)))
 
-
-# knit(report_file,
-#      output = output_path,
-#      tangle = FALSE,
-#      text = NULL,
-#      quiet = FALSE,
-#      envir = parent.frame(),
-#      encoding = "UTF-8"
-#      )

@@ -64,7 +64,7 @@ output_loadings = file.path(parent_folder, "results", paste0(experiment, "_pca_l
 write.table(loadings, file = output_loadings, sep = '\t')
 
 # Save the eigenvalues
-pca_eigenvalue=get_eig(pca)
+pca_eigenvalue=factoextra::get_eig(pca)
 output_eigenvalues = file.path(parent_folder, "results", paste0(experiment, "_pca_eigenvalues.txt"))
 write.table(pca_eigenvalue, file = output_eigenvalues, sep = '\t')
 
@@ -85,9 +85,9 @@ for (i in 1:(length(json$design_variables))){
 
 # Figures for the report
 
-figure6 = file.path(parent_folder, "figures", paste0(experiment, "scree_plot.png"))
+figure6 = file.path(parent_folder, "figures", paste0(experiment, "_scree_plot.png"))
 png(figure6)
-fviz_eig(pca) # another way to visualize percentage contribution
+factoextra::fviz_eig(pca) # another way to visualize percentage contribution
 dev.off()
 
 # figure of PC1 vs PC2
@@ -106,6 +106,14 @@ for (col_names in 2:ncol(pca_data)){
 
 design$Sample = row.names(design)
 pca_data = dplyr::left_join(pca_data, design, by = "Sample")
+
+# Convert the PC columns to numeric in the data set
+for (column in 1:ncol(pca_data)){
+  colname = colnames(pca_data[column])
+  if (sum(base::grep("PC", colname))>0){
+    pca_data[,column] = as.numeric(pca_data[,column])
+  }
+}
 
 # If loop to make a PC plot depending on whether we have 1 or 2 design formulas:
 

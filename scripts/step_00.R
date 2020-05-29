@@ -18,7 +18,8 @@ for (i in 1:length(bioc_packages)){
 
 
 packages <- c("dplyr", "factoextra", "forestmangr", "ggplot2",
-              "jsonlite", "knitr", "readr", "rmarkdown", "stringr")
+              "jsonlite", "knitr", "readr", "rmarkdown", "stringr",
+              "grid", "gridExtra")
 print("*** Checking that required CRAN packages are installed ***")
 for (j in 1:length(packages)){
   if (length(setdiff(packages[j], rownames(installed.packages()))) > 0) {

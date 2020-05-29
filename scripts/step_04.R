@@ -30,15 +30,34 @@ path2_count_sd = file.path(parent_folder, "results", paste0(experiment, "_geneco
 
 # Extracting the mean and sd thresholds
 # If they do not exist in the json, set them at 0.25%
-
+# mean
 if (is.na(json$"input_variables"$"mean_precentage_threshold")){
   mean_thr = 0.25
-} else{mean_thr = json$"input_variables"$"mean_precentage_threshold"}
+} else if (!is.numeric(json$"input_variables"$"mean_precentage_threshold")){
+  print("Invalid mean percentage threshold. Setting default threshold = 0.25")
+  mean_thr = 0.25
+} else if (json$"input_variables"$"mean_precentage_threshold" <0 ){
+  print("Percentage mean threshold should be >0 and <1. Setting default threshold = 0.25")
+  mean_thr = 0.25
+} else if (json$"input_variables"$"mean_precentage_threshold" >1 ){
+  print("Percentage mean threshold should be >0 and <1. Setting default threshold = 0.25")
+  mean_thr = 0.25
+} else {mean_thr = json$"input_variables"$"mean_precentage_threshold"}
 
-
+# sd
 if (is.na(json$"input_variables"$"sd_precentage_threshold")){
   sd_thr = 0.25
+} else if (!is.numeric(json$"input_variables"$"sd_precentage_threshold")){
+  print("Invalid sd percentage threshold. Setting default threshold = 0.25")
+  sd_thr = 0.25
+} else if (json$"input_variables"$"sd_precentage_threshold" <0 ){
+  print("Percentage sd threshold should be >0 and <1. Setting default threshold = 0.25")
+  sd_thr = 0.25
+} else if (json$"input_variables"$"sd_precentage_threshold" >1 ){
+  print("Percentage sd threshold should be >0 and <1. Setting default threshold = 0.25")
+  sd_thr = 0.25
 } else {sd_thr = json$"input_variables"$"sd_precentage_threshold"}
+
 
 
 # Read in the Z table, avg, and sd tables
@@ -53,11 +72,6 @@ mean_subset <- subset(raw_means, raw_means[,1]>mean_quantile)
 sd_subset <- subset(raw_sd, raw_sd[,1] > sd_quantile)
 
 # Subsetting the data set for a min average and variance in expression levels
-# The mean is the average gene expression
-# low mean means the gene is not highly expressed across samples
-# The sd relates to variation across samples
-# Low sd means that the gene is expressed similarly across samples (treatment vs control)
-
 gene_id_mn = intersect(rownames(Z), rownames(mean_subset))
 Z = Z[gene_id_mn,]
 stopifnot(rownames(Z) == rownames(mean_subset))

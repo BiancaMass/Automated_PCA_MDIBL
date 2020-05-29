@@ -67,11 +67,10 @@ write.table(counts_stdev, file = output_sd, sep = '\t')
 
 
 # Construct the DeSeq data set to apply rlog()
-print("*** Constructing the DESeq Data set ***")
 print("*** Extracting the design formula from the JSON input file ***")
-
 design_formula = as.formula(paste0(as.name(as.character(json$design_formula$design)), ""))
 
+print("*** Constructing the DESeq Data set ***")
 ## Construct the DeSeq data set using the countdata (countmatrix) and coldata (sample information)
 dds <- DESeqDataSetFromMatrix(countData = counts,
                               colData = design,

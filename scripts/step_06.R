@@ -1,13 +1,12 @@
 ## A script that performs linear regression on log10 value of % Eigenvalues vs component number
 ## for 1->N, 2->N, until (N-2)->N and finds the meaningful PCs with a maximum threshold on the
-## R-squared value for each regression. N max = variable in JSON. Default = 10.
+## R-squared value for each regression. N max = variable in JSON. Default = 9.
 ## It adds the coordinate of individual observations for each sample on each meaningful
 ## PC to the design file as new columns (PC1, PC2...PCN where N = last meaningful PC)
 
 args = base::commandArgs(trailingOnly = TRUE)
 print(args)
 path2_json_file = args[1]
-
 # **********************************************************************
 
 ## Load in the necessary libraries:
@@ -97,7 +96,7 @@ json_copy$path_2_results$pc_vs_eigen = as.character(output_pc_eigen)
 # Establish the cutoff line and save that line as last_meaningful:
 
 for (i in 1:((nrow(res))-1)){
-  if (res$R_squared[i] > max_Rsqured){
+  if (res$adj_R_squared[i] > max_Rsqured){
     break()
   } 
   last_meaningful = i

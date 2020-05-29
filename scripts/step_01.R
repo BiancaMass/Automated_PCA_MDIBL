@@ -54,7 +54,7 @@ counts = read.table(path2_counts, header = TRUE, sep = "\t", row.names = 1)
 print("Checking that the est. counts matrix has no NAs")
 ##Check that the matrix has no NAs. If there are, print a warning message:
 if(sum(is.na(counts)) > 0){
-  print('--- Error: there are NAs in the count matrix')
+  print('--- Warning: there are NAs in the count matrix')
 }
 
 print("*** Checking for a 1-1 correspondence between sample names in the two files ***")
