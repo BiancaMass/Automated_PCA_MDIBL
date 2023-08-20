@@ -1,5 +1,5 @@
 # Automated_PCA_MDIBL
-This repository contains a pipeline that identifies unexpected variables in an expression data matrix. It performs normalization on the count matrix, PC Analysis, and regression on the PCs vs. experimental design. Once meaningful principal components are identified, their coordinates are captured into a modified design file, to perform further regression and, in case no correlation is found between PC and design equation variables, to be used for downstream analysis as surrogates of unexpected variable(s).
+This repository contains a pipeline that identifies unexpected variables in an expression data matrix. It performs normalization on the count matrix, Principal Component Analysis, and regression on the PCs vs. experimental design. Once meaningful principal components are identified, their coordinates are captured into a modified design file, to perform further regression and, in case no correlation is found between PC and design equation variables, to be used for downstream analysis as surrogates of unexpected variable(s).
 
 
 1. Requirements
